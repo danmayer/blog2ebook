@@ -3,14 +3,10 @@ GEM
   specs:
     awesome_print (1.1.0)
     chronic (0.9.1)
-    coderay (1.0.7)
-    daemons (1.1.9)
-    eventmachine (1.0.0)
     fast-stemmer (1.0.2)
     guess_html_encoding (0.0.9)
     json (1.7.5)
     metaclass (0.0.1)
-    method_source (0.8)
     mime-types (1.23)
     mocha (0.13.1)
       metaclass (~> 0.0.1)
@@ -21,10 +17,6 @@ GEM
       fast-stemmer
       nokogiri
       sanitize
-    pry (0.9.10)
-      coderay (~> 1.0.5)
-      method_source (~> 0.8)
-      slop (~> 3.3.1)
     rack (1.5.2)
     rack-protection (1.2.0)
       rack
@@ -43,11 +35,6 @@ GEM
       rack (~> 1.3, >= 1.3.6)
       rack-protection (~> 1.2)
       tilt (~> 1.3, >= 1.3.3)
-    slop (3.3.3)
-    thin (1.5.0)
-      daemons (>= 1.0.9)
-      eventmachine (>= 0.12.6)
-      rack (>= 1.0.0)
     tilt (1.3.3)
 
 PLATFORMS
@@ -58,10 +45,8 @@ DEPENDENCIES
   mocha
   nokogiri
   pismo
-  pry
   rack-test
   rake
   rest-client
   ruby-readability
   sinatra
-  thin

@@ -18,7 +18,7 @@ end
 
 if RbConfig::CONFIG['host_os'] =~ /darwin/
   group :development do
-    gem 'thin'
-    gem 'pry'
+    #gem 'thin'
+    #gem 'pry'
   end
 end
