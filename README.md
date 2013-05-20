@@ -37,8 +37,6 @@ This is a simple project that started because I was going on a trip and wanted t
 
 ## TODO
 
-  * HTML frontend
-  * deployment to heroku
   * tests / travis CI
   * download and embed images from posts
   * support converting github repos to kindle formatted books
