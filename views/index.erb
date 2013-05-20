@@ -1,0 +1,35 @@
+<div>
+  <h1>Convert your favorite blog to a kindle book</h1>
+  
+  <p>The kindleizer is a tiny app that takes a RSS feed and converts it to a kindle book and emails it to you.</p>
+
+  <div class='setup-notice'>
+    <h3>You must accept configure your kindle email to accept emails before sending!</h3>
+    <p>
+     To do this follow the simple steps below.
+     <ol>
+      <li>
+        visit <a href="https://www.amazon.com/gp/digital/fiona/manage#pdocSettings">https://www.amazon.com/gp/digital/fiona/manage#pdocSettings</a>
+      </li>
+      <li>notice you kindle email address, you will want send to yourname@kindle.com for whispernet or yourname@free.kindle.com for free wifi delivery.</li>
+      <li>find the section 'Approved Personal Document E-mail List'</li>
+      <li>add 'kindleizer@mayerdan.com' to the list of approved email addresses</li>
+    <p>
+  </div>
+
+  <% if params['success'].to_s=='true' %>
+    <div class='success'>
+      <h3>Your book is being emailed shortly.</h3>
+    </div>
+  <% end %>
+
+  <form action="/kindleize_blog" method="post">
+    <label>RSS feed url: 
+      <input type="text" name="url" placeholder="RSS feed url (ex: http://codeascraft.com/feed/)" />
+    </label><br/>
+    <label>Kindle Email: 
+      <input type="text" name="email" placeholder="brucewayne@free.kindle.com" />
+    </label><br/>
+    <input type="submit" name="submit" value="Kindleize It" class="button" />
+  </form>
+</div>

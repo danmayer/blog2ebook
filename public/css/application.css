@@ -1,0 +1,22 @@
+body {
+  padding-top: 50px;
+}
+
+input[type="text"] {
+    width: 80%;
+}
+
+.success {
+  color: #00FF00;
+}
+
+.setup-notice {
+  background: #FFCCCC;
+  padding: 8px;
+  margin-bottom: 24px;
+}
+
+.setup-notice h3 {
+  font-size: 16px;
+  color: #C00000;
+}
