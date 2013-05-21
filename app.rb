@@ -87,7 +87,7 @@ get_or_post '/kindleizeblog' do
   title    = doc[:title] 
   to_email = params['email']
 
-  puts "emailing #{title} to #{to_email}"
+  puts "emailing #{title} to #{to_email} content #{content.length}"
   response = email_to_kindle(title, content, to_email)
 
   request.accept.each do |type|
@@ -106,15 +106,15 @@ end
 private
 
 def email_to_kindle(title, content, to_email)
-  attached = "#{settings.root}/tmp/#{title.gsub(' ','_')}.html"
-  File.open(attached, 'w') {|f| f.write(kindle_format_wrapper(title, content)) }
+  #attached = "#{settings.root}/tmp/#{title.gsub(' ','_')}.html"
+  #File.open(attached, 'w') {|f| f.write(kindle_format_wrapper(title, content)) }
 
   RestClient.post MAIL_API_URL+"/messages",
   :from => "kindleizer@mayerdan.com",
   :to => to_email,
   :subject => "kindle book",
   :text => 'kindle book attached',
-  :attachment =>  File.new(attached)
+  :attachment => StringIO.new attached #File.new(attached)
 end
 
 def kindle_format_wrapper(title, content)
