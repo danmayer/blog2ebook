@@ -41,3 +41,4 @@ This is a simple project that started because I was going on a trip and wanted t
   * download and embed images from posts
   * support converting github repos to kindle formatted books
   * support multiple book formats possibly using Calibre for converting
+  * this crashes it 'http://readwrite.com/tags/feed/start/articles.xml'

@@ -106,10 +106,9 @@ end
 private
 
 def email_to_kindle(title, content, to_email)
-  `mkdir -p #{settings.root}/tmp` 
+  `mkdir -p #{settings.root}/tmp` #heroku needs tmp have sinatra template always include the directory but ignore all files
   attached = "#{settings.root}/tmp/#{title.gsub(' ','_')}.html"
   File.open(attached, 'w') {|f| f.write(kindle_format_wrapper(title, content)) }
-  #attached = kindle_format_wrapper(title, content)
 
   RestClient.post MAIL_API_URL+"/messages",
   :from => "kindleizer@mayerdan.com",
@@ -117,8 +116,6 @@ def email_to_kindle(title, content, to_email)
   :subject => "kindle book",
   :text => 'kindle book attached',
   :attachment => File.new(attached)
-
-# StringIO.new(attached)
 end
 
 def kindle_format_wrapper(title, content)
