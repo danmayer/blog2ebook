@@ -106,18 +106,19 @@ end
 private
 
 def email_to_kindle(title, content, to_email)
-  #attached = "#{settings.root}/tmp/#{title.gsub(' ','_')}.html"
-  #File.open(attached, 'w') {|f| f.write(kindle_format_wrapper(title, content)) }
-  attached = kindle_format_wrapper(title, content)
+  `mkdir -p #{settings.root}/tmp` 
+  attached = "#{settings.root}/tmp/#{title.gsub(' ','_')}.html"
+  File.open(attached, 'w') {|f| f.write(kindle_format_wrapper(title, content)) }
+  #attached = kindle_format_wrapper(title, content)
 
   RestClient.post MAIL_API_URL+"/messages",
   :from => "kindleizer@mayerdan.com",
   :to => to_email,
   :subject => "kindle book",
   :text => 'kindle book attached',
-  :attachment => StringIO.new(attached)
+  :attachment => File.new(attached)
 
- #File.new(attached)
+# StringIO.new(attached)
 end
 
 def kindle_format_wrapper(title, content)
