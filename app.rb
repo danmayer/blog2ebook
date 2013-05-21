@@ -106,7 +106,7 @@ end
 private
 
 def email_to_kindle(title, content, to_email)
-  attached = "#{__FILE__}/../tmp/#{title.gsub(' ','_')}.html"
+  attached = "#{settings.root}/tmp/#{title.gsub(' ','_')}.html"
   File.open(attached, 'w') {|f| f.write(kindle_format_wrapper(title, content)) }
 
   RestClient.post MAIL_API_URL+"/messages",
