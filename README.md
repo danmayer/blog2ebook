@@ -11,10 +11,10 @@ This is a simple project that started because I was going on a trip and wanted t
 
 ## Examples
 
-    open http://localhost:3000/kindleize_blog?url=http://mayerdan.com/atom.xml
-    open http://localhost:3000/kindleize_blog?url=http://erinashleymiller.com/feed/
-    open http://localhost:3000/kindleize_blog?url=http://codeascraft.com/feed/
-    open http://localhost:3000/kindleize_blog?url=http://techblog.netflix.com/rss.xml
+    open http://localhost:3000/kindleizeblog?url=http://mayerdan.com/atom.xml
+    open http://localhost:3000/kindleizeblog?url=http://erinashleymiller.com/feed/
+    open http://localhost:3000/kindleizeblog?url=http://codeascraft.com/feed/
+    open http://localhost:3000/kindleizeblog?url=http://techblog.netflix.com/rss.xml
 
 ## Useful related links
 

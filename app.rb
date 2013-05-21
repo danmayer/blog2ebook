@@ -70,7 +70,7 @@ get '/kindleize' do
   email_to_kindle(title, content, to_email)
 end
 
-get_or_post '/kindleize_blog' do
+get_or_post '/kindleizeblog' do
   unless params['url'].to_s.length > 1 && params['email'].to_s.length > 1
     request.accept.each do |type|
       case type
