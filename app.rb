@@ -115,7 +115,9 @@ def email_to_kindle(title, content, to_email)
   :to => to_email,
   :subject => "kindle book",
   :text => 'kindle book attached',
-  :attachment => StringIO.new attached #File.new(attached)
+  :attachment => StringIO.new(attached)
+
+ #File.new(attached)
 end
 
 def kindle_format_wrapper(title, content)
