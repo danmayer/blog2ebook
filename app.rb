@@ -9,27 +9,13 @@ require 'nokogiri'
 MAIL_API_KEY = ENV['MAILGUN_API_KEY']
 MAIL_API_URL = "https://api:#{MAIL_API_KEY}@api.mailgun.net/v2/app7941314.mailgun.org"
 
-#use Rack::SslEnforcer unless ENV['RACK_ENV']=='test'
 set :public_folder, File.dirname(__FILE__) + '/public'
 set :root, File.dirname(__FILE__)
 enable :logging
 
 helpers do
-  def protected!
-    unless authorized?
-      response['WWW-Authenticate'] = %(Basic realm="Testing HTTP Auth")
-      throw(:halt, [401, "Not authorized\n"])
-    end
-  end
-
-  def authorized?
-    @auth ||=  Rack::Auth::Basic::Request.new(request.env)
-    @auth.provided? && @auth.basic? && @auth.credentials && @auth.credentials == ['admin', 'responder']
-  end
 
 end
-
-#before { protected! if request.path_info == "/" && request.request_method == "GET" && ENV['RACK_ENV']!='test' }
 
 def self.get_or_post(url,&block)
   get(url,&block)
@@ -43,7 +29,7 @@ get '/' do
   erb :index
 end
 
-get '/get_content' do
+get_or_post '/get_content' do
   unless params['url'].to_s.length > 1
     return {:error => 'requires url to check for content'}.to_json
   end
@@ -58,19 +44,53 @@ get '/get_content' do
   {:content => document_from_url(params['url'])['content']}.to_json
 end
 
-get '/kindleize' do
-  unless params['url'].to_s.length > 1 && params['email'].to_s.length > 1
-    return {:error => 'requires url to check for content'}.to_json
-  end
+get_or_post '/kindleizecontent' do
+  verify_url_and_email
+  content  = params['content']
+  title    = content.split("\n").first
+  to_email = params['email']
+
+  email_to_kindle(title, content, to_email)
+  success_response
+end
+
+get_or_post '/kindleize' do
+  verify_url_and_email
   doc      = document_from_url(params['url'])
   content  = doc['content']
   title    = doc['title'] 
   to_email = params['email']
 
   email_to_kindle(title, content, to_email)
+  success_response
 end
 
 get_or_post '/kindleizeblog' do
+  verify_url_and_email
+  doc      = document_from_feed(params['url'])
+  content  = doc[:content]
+  title    = doc[:title] 
+  to_email = params['email']
+
+  puts "emailing #{title} to #{to_email} content #{content.length}"
+  response = email_to_kindle(title, content, to_email)
+  success_response
+end
+
+private
+
+def success_response
+  request.accept.each do |type|
+    case type
+    when 'text/json'
+      halt ({:success => 'true'}.to_json)
+    else
+      halt redirect '/?success=true'
+    end
+  end
+end
+
+def verify_url_and_email
   unless params['url'].to_s.length > 1 && params['email'].to_s.length > 1
     request.accept.each do |type|
       case type
@@ -81,32 +101,11 @@ get_or_post '/kindleizeblog' do
       end
     end
   end
-
-  doc      = document_from_feed(params['url'])
-  content  = doc[:content]
-  title    = doc[:title] 
-  to_email = params['email']
-
-  puts "emailing #{title} to #{to_email} content #{content.length}"
-  response = email_to_kindle(title, content, to_email)
-
-  request.accept.each do |type|
-    case type
-    when 'text/html'
-      halt redirect '/?success=true'
-    when 'text/json'
-      halt response
-    else
-      halt redirect '/?success=true'
-    end
-  end
-
 end
 
-private
-
 def email_to_kindle(title, content, to_email)
-  `mkdir -p #{settings.root}/tmp` #heroku needs tmp have sinatra template always include the directory but ignore all files
+  # heroku needs tmp have sinatra template always include the directory but ignore all files
+  `mkdir -p #{settings.root}/tmp`
   attached = "#{settings.root}/tmp/#{title.gsub(' ','_')}.html"
   File.open(attached, 'w') {|f| f.write(kindle_format_wrapper(title, content)) }
 

@@ -14,7 +14,12 @@ class MyAppTest < Test::Unit::TestCase
 
   def test_root
     get '/'
-    assert_match 'Welcome', last_response.body
+    assert_match 'Convert', last_response.body
+  end
+
+  def test_kindleize
+    get '/kindleize?url=http://batman.com&content=heythere'
+    assert_match redirect_to '/?success=true'
   end
 
   private
