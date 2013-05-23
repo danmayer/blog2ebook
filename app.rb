@@ -5,6 +5,7 @@ require 'readability'
 require 'rest-client'
 require 'open-uri'
 require 'nokogiri'
+require 'rack-flash'
 
 MAIL_API_KEY = ENV['MAILGUN_API_KEY']
 MAIL_API_URL = "https://api:#{MAIL_API_KEY}@api.mailgun.net/v2/app7941314.mailgun.org"
@@ -12,6 +13,8 @@ MAIL_API_URL = "https://api:#{MAIL_API_KEY}@api.mailgun.net/v2/app7941314.mailgu
 set :public_folder, File.dirname(__FILE__) + '/public'
 set :root, File.dirname(__FILE__)
 enable :logging
+enable :sessions
+use Rack::Flash, :sweep => true
 
 helpers do
 
@@ -23,9 +26,6 @@ def self.get_or_post(url,&block)
 end
 
 get '/' do
-  if params['error']
-    @error = params['error']
-  end
   erb :index
 end
 
@@ -45,7 +45,7 @@ get_or_post '/get_content' do
 end
 
 get_or_post '/kindleizecontent' do
-  verify_url_and_email
+  verify_content_and_email
   content  = params['content']
   title    = content.split("\n").first
   to_email = params['email']
@@ -97,7 +97,22 @@ def verify_url_and_email
       when 'text/json'
         halt ({:error => 'requires url to check for content'}).to_json
       else
-        halt redirect '/?error=missing email or url'
+        flash[:error] = "missing email or url"
+        halt redirect '/'
+      end
+    end
+  end
+end
+
+def verify_content_and_email
+  unless params['content'].to_s.length > 1 && params['email'].to_s.length > 1
+    request.accept.each do |type|
+      case type
+      when 'text/json'
+        halt ({:error => 'requires email and content to be passed'}).to_json
+      else
+        flash[:error] = "missing email or content"
+        halt redirect '/'
       end
     end
   end

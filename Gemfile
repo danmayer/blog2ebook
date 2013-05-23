@@ -6,6 +6,7 @@ gem 'pismo'
 gem "ruby-readability", :require => 'readability'
 gem 'rest-client'
 gem 'nokogiri'
+gem 'rack-flash3'
 #gem 'rack-ssl-enforcer'
 
 # Prevent installation on Heroku with
