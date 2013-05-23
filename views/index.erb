@@ -17,12 +17,6 @@
     <p>
   </div>
 
-  <% if params['success'].to_s=='true' %>
-    <div class='success'>
-      <h3>Your book is being emailed shortly.</h3>
-    </div>
-  <% end %>
-
   <form action="/kindleizeblog" method="post">
     <label>RSS feed url: 
       <input type="text" name="url" placeholder="RSS feed url (ex: http://codeascraft.com/feed/)" />

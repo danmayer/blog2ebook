@@ -51,7 +51,7 @@ get_or_post '/kindleizecontent' do
   to_email = params['email']
 
   email_to_kindle(title, content, to_email)
-  success_response
+  success_response('Your content is being emailed to your kindle shortly.')
 end
 
 get_or_post '/kindleize' do
@@ -62,7 +62,7 @@ get_or_post '/kindleize' do
   to_email = params['email']
 
   email_to_kindle(title, content, to_email)
-  success_response
+  success_response('Your article will be emailed to your kindle shortly.')
 end
 
 get_or_post '/kindleizeblog' do
@@ -74,18 +74,19 @@ get_or_post '/kindleizeblog' do
 
   puts "emailing #{title} to #{to_email} content #{content.length}"
   response = email_to_kindle(title, content, to_email)
-  success_response
+  success_response('Your book is being emailed to your kindle shortly.')
 end
 
 private
 
-def success_response
+def success_response(notice)
   request.accept.each do |type|
     case type
     when 'text/json'
       halt ({:success => 'true'}.to_json)
     else
-      halt redirect '/?success=true'
+      flash[:notice] = notice
+      halt redirect '/'
     end
   end
 end
