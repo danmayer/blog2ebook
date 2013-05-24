@@ -6,6 +6,12 @@ input[type="text"] {
     width: 80%;
 }
 
+textarea {
+    width: 80%;
+    height: 90px;
+}
+
+
 .success {
   color: #00FF00;
 }

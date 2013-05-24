@@ -44,3 +44,4 @@ This is a simple project that started because I was going on a trip and wanted t
   * this crashes it 'http://readwrite.com/tags/feed/start/articles.xml'
   * If you add your email it writes to a cookie and the big red warning goes away
   * Brad Feld's blog has some bad character encoding issues
+  * better coverage for some edge / error cases
