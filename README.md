@@ -54,3 +54,8 @@ This is a simple project that started because I was going on a trip and wanted t
 5. If you haven't already read about good [Pull Request practices](http://codeinthehole.com/writing/pull-requests-and-other-good-practices-for-teams-using-github/) or have never submitted one before read about submitting [your first pull request](http://jumpstartlab.com/news/archives/2013/04/15/your-first-pull-request)
 6. Open a [Pull Request](https://help.github.com/articles/using-pull-requests)
 7. Awesome thanks I will try to get back to you soon.
+
+## MIT License
+
+See the file license.txt for copying permission.
+
