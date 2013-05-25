@@ -6,6 +6,7 @@ require 'rest-client'
 require 'open-uri'
 require 'nokogiri'
 require 'rack-flash'
+require 'email_veracity'
 
 MAIL_API_KEY = ENV['MAILGUN_API_KEY']
 MAIL_API_URL = "https://api:#{MAIL_API_KEY}@api.mailgun.net/v2/app7941314.mailgun.org"
@@ -103,6 +104,7 @@ def verify_url_and_email
       end
     end
   end
+  verify_email
 end
 
 def verify_content_and_email
@@ -113,6 +115,31 @@ def verify_content_and_email
         halt ({:error => 'requires email and content to be passed'}).to_json
       else
         flash[:error] = "missing email or content"
+        halt redirect '/'
+      end
+    end
+  end
+  verify_email
+end
+
+def verify_email
+  address = EmailVeracity::Address.new(params['email'])
+  request.accept.each do |type|
+    case type
+    when 'text/json'
+      unless address.valid?
+        halt ({:error => 'email must be valid'}).to_json
+      end
+      unless address.domain.to_s.match(/kindle\.com/)
+        halt ({:error => 'must be a kindle address'}).to_json
+      end
+    else
+      unless address.valid?
+        flash[:error] = "email must be valid"
+        halt redirect '/'
+      end
+      unless address.domain.to_s.match(/kindle\.com/)
+        flash[:error] = 'must be a kindle address'
         halt redirect '/'
       end
     end

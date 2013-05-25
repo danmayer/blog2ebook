@@ -1,28 +1,9 @@
 (function ($) {
 
-  if(document.cookie.match(/kindle_mail/)==null) {
-    $('#setupNotice').slideDown('slow');
-  } else {
-    var email = readCookie('kindle_mail');
-    $('input[name="email"]').val(email);
+  function init() {
+    showSetup();
+    attachToDom();
   }
-
-  $('#setup').click(function() {
-    $('#setupNotice').slideDown('slow');
-    return false;
-  });
-
-  $('#notice-form').submit(function() {
-    var email = $('#kindle-mail').val();
-    if (email.match(/kindle\.com/)!=null) {
-      setCookie('kindle_mail',email,300);
-      $('input[name="email"]').val(email);
-      $('#setupNotice').slideUp();
-    } else {
-      alert('must use a kindle.com or free.kindle.com email address for this to work.')
-    }
-    return false;
-  });
   
   function setCookie(c_name,value,exdays) {
     var exdate=new Date();
@@ -41,4 +22,35 @@
     }
     return null;
   }
+
+  function showSetup() {
+    if(document.cookie.match(/kindle_mail/)==null) {
+      $('#setupNotice').slideDown('slow');
+    } else {
+      var email = readCookie('kindle_mail');
+      $('input[name="email"]').val(email);
+    }
+  }
+
+  function attachToDom() {
+    $('#setup').click(function() {
+      $('#setupNotice').slideDown('slow');
+      return false;
+    });
+
+    $('#notice-form').submit(function() {
+      var email = $('#kindle-mail').val();
+      if (email.match(/kindle\.com/)!=null) {
+	setCookie('kindle_mail',email,300);
+	$('input[name="email"]').val(email);
+	$('#setupNotice').slideUp();
+      } else {
+	alert('must use a kindle.com or free.kindle.com email address for this to work.')
+      }
+      return false;
+    });
+  }
+
+  init();
+
 }(jQuery));

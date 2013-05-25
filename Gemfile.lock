@@ -3,6 +3,7 @@ GEM
   specs:
     awesome_print (1.1.0)
     chronic (0.9.1)
+    email_veracity (0.6.0)
     fast-stemmer (1.0.2)
     guess_html_encoding (0.0.9)
     json (1.7.5)
@@ -43,6 +44,7 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
+  email_veracity
   json
   mocha
   nokogiri
