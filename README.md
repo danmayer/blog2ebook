@@ -43,7 +43,6 @@ This is a simple project that started because I was going on a trip and wanted t
   * support multiple book formats possibly using Calibre for converting
   * this crashes it 'http://readwrite.com/tags/feed/start/articles.xml'
   * Brad Feld's blog has some bad character encoding issues
-  * better coverage for some edge / error cases
   
 ## Contributing
 

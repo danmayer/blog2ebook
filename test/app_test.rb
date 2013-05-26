@@ -18,8 +18,12 @@ class MyAppTest < Test::Unit::TestCase
   end
 
   def test_kindleize
-    get '/kindleize?url=http://batman.com&content=heythere'
-    assert_match redirect_to '/?success=true'
+    app.stubs(:document_from_url).returns({'content' => 'hey', 'title' => 'rock on'})
+    app.stubs(:email_to_kindle).returns(true)
+    get '/kindleize?url=http://batman.com&email=fake@kindle.com'
+    assert_equal true, last_response.redirect?
+    follow_redirect!
+    assert_equal last_request.url, 'http://example.org/'
   end
 
   private

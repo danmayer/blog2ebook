@@ -81,6 +81,11 @@ end
 private
 
 def success_response(notice)
+  #todo why isn't content type set in test mode?
+  if request.content_type.nil?
+    flash[:notice] = notice
+    halt redirect '/'
+  end
   request.accept.each do |type|
     case type
     when 'text/json'
