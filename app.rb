@@ -67,18 +67,39 @@ get_or_post '/kindleize' do
 end
 
 get_or_post '/kindleizeblog' do
-  verify_url_and_email
-  doc      = document_from_feed(params['url'])
-  content  = doc[:content]
-  title    = doc[:title] 
-  to_email = params['email']
+  begin
+    verify_url_and_email  
+    doc      = document_from_feed(params['url'])
+    content  = doc[:content]
+    title    = doc[:title] 
+    to_email = params['email']
 
-  puts "emailing #{title} to #{to_email} content #{content.length}"
-  response = email_to_kindle(title, content, to_email)
-  success_response('Your book is being emailed to your kindle shortly.')
+    puts "emailing #{title} to #{to_email} content #{content.length}"
+    response = email_to_kindle(title, content, to_email)
+    success_response('Your book is being emailed to your kindle shortly.')
+  rescue => error
+    error_response("There was a error building your book sorry about that please let me know what problems you had: #{error.message}")
+  end
 end
 
 private
+
+def error_response(notice)
+  #todo why isn't content type set in test mode?
+  if request.content_type.nil?
+    flash[:error] = notice
+    halt redirect '/'
+  end
+  request.accept.each do |type|
+    case type
+    when 'text/json'
+      halt ({:error => notice}.to_json)
+    else
+      flash[:error] = notice
+      halt redirect '/'
+    end
+  end
+end
 
 def success_response(notice)
   #todo why isn't content type set in test mode?
@@ -196,6 +217,8 @@ end
 def content_from_entry(entry)
   if entry.search('content').length > 0
     entry.search('content').first.content
+  elsif entry.search('description').length > 0
+    entry.search('description').map(&:content).join("\n")
   else
     entry.at_xpath("content:encoded").text
   end
@@ -225,9 +248,9 @@ end
 # <a name="chap1" /> 
 ###
 def document_from_feed(url)
+puts 'doc'
   results = RestClient.get(url)
   xml_doc  = Nokogiri::XML::Document.parse(results)
-  #puts xml_doc.inspect
   
   title = title_from_feed(xml_doc)
   content = ''
