@@ -7,6 +7,7 @@ require 'open-uri'
 require 'nokogiri'
 require 'rack-flash'
 require 'email_veracity'
+require './lib/book_formatter'
 
 MAIL_API_KEY = ENV['MAILGUN_API_KEY']
 MAIL_API_URL = "https://api:#{MAIL_API_KEY}@api.mailgun.net/v2/app7941314.mailgun.org"
@@ -178,21 +179,20 @@ def verify_email
 end
 
 def email_to_kindle(title, content, to_email)
-  # heroku needs tmp have sinatra template always include the directory but ignore all files
+  # TODO (update template project as well) heroku needs tmp have sinatra template always include the directory but ignore all files
   `mkdir -p #{settings.root}/tmp`
-  attached = "#{settings.root}/tmp/#{title.gsub(' ','_')}.html"
-  File.open(attached, 'w') {|f| f.write(kindle_format_wrapper(title, content)) }
+
+  book = BookFormatter.new(title, content)
+  book_file = book.book_file_name(settings.root)
+
+  File.open(book_file, 'w') {|f| f.write(book.formatted_book) }
 
   RestClient.post MAIL_API_URL+"/messages",
   :from => "kindleizer@mayerdan.com",
   :to => to_email,
   :subject => "kindle book",
   :text => 'kindle book attached',
-  :attachment => File.new(attached)
-end
-
-def kindle_format_wrapper(title, content)
-  template = "<html><head><title>#{title}</title></head><body>#{content}</body></html>"
+  :attachment => File.new(book_file)
 end
 
 def document_from_url(url)
