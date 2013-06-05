@@ -14,7 +14,12 @@ MAIL_API_URL = "https://api:#{MAIL_API_KEY}@api.mailgun.net/v2/app7941314.mailgu
 set :public_folder, File.dirname(__FILE__) + '/public'
 set :root, File.dirname(__FILE__)
 enable :logging
-enable :sessions
+
+use Rack::Session::Cookie, :key => 'kindleizer.rack.session',
+                           :path => '/',
+                           :expire_after => 2592000, # In seconds
+                           :secret => "update_secret_#{ENV['MAILGUN_API_KEY']}"
+
 use Rack::Flash, :sweep => true
 
 helpers do
