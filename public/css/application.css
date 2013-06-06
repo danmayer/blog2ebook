@@ -6,11 +6,24 @@ input[type="text"] {
     width: 80%;
 }
 
-textarea {
-    width: 80%;
-    height: 90px;
+label.short {
+    display: inline-block;
+    width: 640px;
 }
 
+.short input[type="text"] {
+    width: 520px;
+}
+
+input.stacked {
+    margin-bottom: 8px;
+    margin-left: 12px;
+}
+
+textarea {
+    width: 80%;
+    height: 200px;
+}
 
 .success {
   color: #00FF00;

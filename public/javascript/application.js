@@ -34,7 +34,8 @@
 
   function attachToDom() {
     $('#setup').click(function() {
-      $('#setupNotice').slideDown('slow');
+      window.scrollTo(0,0);
+      $('#setupNotice').slideToggle('slow');
       return false;
     });
 

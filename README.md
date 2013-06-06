@@ -37,11 +37,11 @@ This is a simple project that started because I was going on a trip and wanted t
 
 ## TODO
 
-  * tests / travis CI
-  * download and embed images from posts
-  * support converting github repos to kindle formatted books
+  * tests / travis CI (add some travis defaults back to Sinatra template)
+  * download and embed images from posts (likely requires compiling to mobi file)
   * support multiple book formats possibly using Calibre for converting
   * Brad Feld's blog has some bad character encoding issues and so does this one 'http://readwrite.com/tags/feed/start/articles.xml''
+  * support converting github repos to kindle formatted books
   
 ## Contributing
 

@@ -32,9 +32,10 @@
     <input type="submit" name="submit" value="Add Email" class="button" />
   </form>
 
-    <p>
+    </p>
   </div>
 
+  <h3>Convert RSS feed to Kindle Book</h3>
   <form action="/kindleizeblog" method="post">
     <label>RSS feed url: 
       <input type="text" name="url" placeholder="RSS feed url (ex: http://codeascraft.com/feed/)" />
@@ -45,6 +46,7 @@
     <input type="submit" name="submit" value="Kindleize It" class="button" />
   </form>
 
+  <h3>Send Single Article</h3>
   <form action="/kindleize" method="post">
     <label>Single Article url: 
       <input type="text" name="url" placeholder="Article url (ex: http://codeascraft.com/feed/)" />
@@ -55,13 +57,15 @@
     <input type="submit" name="submit" value="Kindleize It" class="button" />
   </form>
 
+  <h3>Directly Send Content</h3>
   <form action="/kindleizecontent" method="post">
+    <label class='short'>Kindle Email: 
+      <input type="text" name="email" placeholder="brucewayne@free.kindle.com" />
+    </label>
+    <input type="submit" name="submit" value="Kindleize It" class="button stacked" />
+    <br/>
     <label>Content: 
       <textarea name="content" placeholder="pasted in content"></textarea>
     </label><br/>
-    <label>Kindle Email: 
-      <input type="text" name="email" placeholder="brucewayne@free.kindle.com" />
-    </label><br/>
-    <input type="submit" name="submit" value="Kindleize It" class="button" />
   </form>
 </div>
