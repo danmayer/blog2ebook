@@ -7,7 +7,9 @@ require 'open-uri'
 require 'nokogiri'
 require 'rack-flash'
 require 'email_veracity'
+require 'redis'
 require './lib/book_formatter'
+require './lib/redis_initializer'
 
 MAIL_API_KEY = ENV['MAILGUN_API_KEY']
 MAIL_API_URL = "https://api:#{MAIL_API_KEY}@api.mailgun.net/v2/app7941314.mailgun.org"
@@ -33,6 +35,7 @@ def self.get_or_post(url,&block)
 end
 
 get '/' do
+  @usage = UsageCount.usage_remaining
   erb :index
 end
 
@@ -47,12 +50,13 @@ get_or_post '/get_content' do
   #ruby-readability
   #source = open('http://mayerdan.com/2013/05/08/performance_bugs_cluster/')
   # {:content => Readability::Document.new(source).content}
-
+  
   {:content => document_from_url(params['url'])['content']}.to_json
 end
 
 get_or_post '/kindleizecontent' do
   verify_content_and_email
+  verify_usage
   content  = params['content']
   title    = content.split("\n").first
   to_email = params['email']
@@ -63,6 +67,7 @@ end
 
 get_or_post '/kindleize' do
   verify_url_and_email
+  verify_usage
   doc      = document_from_url(params['url'])
   content  = doc['content']
   title    = doc['title'] 
@@ -74,7 +79,8 @@ end
 
 get_or_post '/kindleizeblog' do
   begin
-    verify_url_and_email  
+    verify_url_and_email
+    verify_usage
     doc      = document_from_feed(params['url'])
     content  = doc[:content]
     title    = doc[:title] 
@@ -89,6 +95,12 @@ get_or_post '/kindleizeblog' do
 end
 
 private
+
+def verify_usage
+  unless UsageCount.usage_remaining > 0
+    error_response("Sorry we ran out of free usage today try again tomorrow.")
+  end
+end
 
 def error_response(notice)
   #todo why isn't content type set in test mode?
@@ -186,6 +198,7 @@ def email_to_kindle(title, content, to_email)
   book_file = book.book_file_name(settings.root)
 
   File.open(book_file, 'w') {|f| f.write(book.formatted_book) }
+  UsageCount.increase
 
   RestClient.post MAIL_API_URL+"/messages",
   :from => "kindleizer@mayerdan.com",
