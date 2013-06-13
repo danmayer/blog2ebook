@@ -1,7 +1,12 @@
-Kindleizer
+Blog2Ebook
 ===
 
 This is a simple project that started because I was going on a trip and wanted to turn some full blogs into books on my kindle.
+
+* Currently supports only Kindle
+  * RSS feed to kindle
+  * Single post to kindle (useful because some https sites no longer allow bookmarklets to work)
+  * Copied Text to kindle 
 
 ## To Run Locally
 
@@ -34,14 +39,17 @@ This is a simple project that started because I was going on a trip and wanted t
 * [blog2book](http://blog2print.sharedbook.com/blogworld/printmyblog/index.html)
 * [anthologize](http://anthologize.org/)
 * [leanpub](https://leanpub.com/)
+* [blog2book pothi app](http://blog2book.pothi.com/app/)
 
 ## TODO
 
-  * tests / travis CI (add some travis defaults back to Sinatra template)
-  * download and embed images from posts (likely requires compiling to mobi file)
-  * support multiple book formats possibly using Calibre for converting
+  * Tests / travis CI (add some travis defaults back to Sinatra template)
+  * Download and embed images from posts (likely requires compiling to mobi file)
+  * Support multiple book formats possibly using Calibre for converting
   * Brad Feld's blog has some bad character encoding issues and so does this one 'http://readwrite.com/tags/feed/start/articles.xml''
-  * support converting github repos to kindle formatted books
+  * Add redis free usage tracking, 50 free a day, each purchase turns on a few more free?
+  * Stripe purchase integration
+  * Support converting github repos to kindle formatted books
   
 ## Contributing
 
