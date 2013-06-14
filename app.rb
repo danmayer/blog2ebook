@@ -1,7 +1,5 @@
 require 'json'
 require 'fileutils'
-require 'pismo'
-require 'readability'
 require 'rest-client'
 require 'open-uri'
 require 'nokogiri'
@@ -9,10 +7,12 @@ require 'rack-flash'
 require 'email_veracity'
 require 'redis'
 require './lib/book_formatter'
+require './lib/document_fetching'
 require './lib/redis_initializer'
 
 MAIL_API_KEY = ENV['MAILGUN_API_KEY']
 MAIL_API_URL = "https://api:#{MAIL_API_KEY}@api.mailgun.net/v2/app7941314.mailgun.org"
+READ_API_TOKEN = ENV['READ_API_TOKEN']
 
 set :public_folder, File.dirname(__FILE__) + '/public'
 set :root, File.dirname(__FILE__)
@@ -37,21 +37,6 @@ end
 get '/' do
   @usage = UsageCount.usage_remaining
   erb :index
-end
-
-get_or_post '/get_content' do
-  unless params['url'].to_s.length > 1
-    return {:error => 'requires url to check for content'}.to_json
-  end
-  # Pismo
-  # doc = Pismo::Document.new(params['url'])
-  # {:content => doc.html_body}.to_json
-
-  #ruby-readability
-  #source = open('http://mayerdan.com/2013/05/08/performance_bugs_cluster/')
-  # {:content => Readability::Document.new(source).content}
-  
-  {:content => document_from_url(params['url'])['content']}.to_json
 end
 
 get_or_post '/kindleizecontent' do
@@ -209,9 +194,13 @@ def email_to_kindle(title, content, to_email)
 end
 
 def document_from_url(url)
-  results = RestClient.get("http://www.readability.com/api/content/v1/parser?url=#{params['url']}&token=6ca222fd6f857c2a27a560edbfc3c9400f3b9bec")
-  json_results = JSON.parse(results)
-  json_results
+  begin
+    results = RestClient::Request.execute(:method => :get, :url => "http://www.readability.com/api/content/v1/parser?url=#{params['url']}&token=#{READ_API_TOKEN}", :timeout => 10, :open_timeout => 10)
+    json_results = JSON.parse(results)
+    json_results
+  rescue RestClient::GatewayTimeout
+    error_response("Hmmm looks like I can't reach that article.")
+  end
 end
 
 def title_from_feed(xml_doc)

@@ -19,7 +19,7 @@ class UsageCount
   end
 
   def self.counter_key
-    "blog2rss:usage"
+    "blog2rss:usage:#{Date.today}"
   end
 
 end
