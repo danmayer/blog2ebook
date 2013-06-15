@@ -25,7 +25,7 @@
 
   function showSetup() {
     if(document.cookie.match(/kindle_mail/)==null) {
-      $('#setupNotice').slideDown('slow');
+      $('#setupNotice').modal();
     } else {
       var email = readCookie('kindle_mail');
       $('input[name="email"]').val(email);
@@ -33,18 +33,18 @@
   }
 
   function attachToDom() {
-    $('#setup').click(function() {
-      window.scrollTo(0,0);
-      $('#setupNotice').slideToggle('slow');
-      return false;
-    });
+    // $('#setup').click(function() {
+    //   window.scrollTo(0,0);
+    //   //$('#setupNotice').modal('toggle');
+    //   return false;
+    // });
 
     $('#notice-form').submit(function() {
       var email = $('#kindle-mail').val();
       if (email.match(/kindle\.com/)!=null) {
 	setCookie('kindle_mail',email,300);
 	$('input[name="email"]').val(email);
-	$('#setupNotice').slideUp();
+	$('#setupNotice').modal('hide');
       } else {
 	alert('must use a kindle.com or free.kindle.com email address for this to work.')
       }

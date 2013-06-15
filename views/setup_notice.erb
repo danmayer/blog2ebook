@@ -1,0 +1,44 @@
+<div id='setupNotice' class="modal hide fade">
+  <div class="modal-header">
+    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+    <h3 id="myModalLabel">Blog2Book Setup</h3>
+  </div>
+  <div class="modal-body">
+    <h5>
+      You must accept configure Amazon to accept delivery to your kindle email to accept emails before sending!
+    </h5>
+    <p>
+      To do this follow the simple steps below.
+      <ol>
+        <li>
+          visit <a href="https://www.amazon.com/gp/digital/fiona/manage#pdocSettings">https://www.amazon.com/gp/digital/fiona/manage#pdocSettings</a>
+        </li>
+        <li>
+          find your kindle email, use yourname@free.kindle.com for free wifi delivery.<br/>
+  Or use yourname@kindle.com for whispernet (may include extra amazon fees).
+	  <img alt="find your kindle email address" src="/images/your_kindle_email.png">
+        </li>
+        <li>
+	  Click the 'Personal Document Settings' link, from the left navigation bar
+	  <img alt="Click the 'Personal Document Settings' link" src="/images/document_settings.png">
+	</li>
+        <li>find the section 'Approved Personal Document E-mail List'</li>
+        <li>
+          add 'kindleizer@mayerdan.com' to the list of approved email addresses
+	  <img alt="add this email to your approved email list" src="/images/add_address.png">
+        </li>
+        <li>
+          Add your email to the form below to pre-fill the email option and make these setup instructions stay hidden.<br/>
+          (email is not stored on the server just saved in browser)
+        </li>
+      </ol>
+
+      <form action="#" method="post" id='notice-form'>
+  <label>Kindle Email (example danmayer@free.kindle.com): 
+          <input type="text" name="email" id="kindle-mail" placeholder="brucewayne@free.kindle.com" />
+        </label>
+        <input type="submit" name="submit" value="Add Email" class="button" />
+      </form>
+    </p>
+  </div>
+</div>

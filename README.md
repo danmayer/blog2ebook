@@ -40,6 +40,7 @@ This is a simple project that started because I was going on a trip and wanted t
 * [anthologize](http://anthologize.org/)
 * [leanpub](https://leanpub.com/)
 * [blog2book pothi app](http://blog2book.pothi.com/app/)
+* [ruby bookshop](https://github.com/blueheadpublishing/bookshop)
 
 ## TODO
 
@@ -51,6 +52,7 @@ This is a simple project that started because I was going on a trip and wanted t
   * Stripe purchase integration
   * Support converting github repos to kindle formatted books
   * Crashes on 'http://www.washingtonpost.com/blogs/wonkblog/wp/2013/06/10/going-to-college-is-worth-it-even-if-you-drop-out/'
+  * This works to convert html with images to mobi `kindlegen -verbose redis_book/redis_book.html -o redisbook.mobi`
   
 ## Contributing
 

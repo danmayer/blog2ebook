@@ -13,37 +13,7 @@
    Since this uses some free resources, it can only be used a limited number of times a day. There are <span><%= @usage %></span> uses remaining today.  
   </p>
 
-  <div id='setupNotice' class='setup-notice' style='display:none'>
-    <h3>
-      You must accept configure your kindle email to accept emails before sending!
-    </h3>
-    <p>
-      To do this follow the simple steps below.
-      <ol>
-        <li>
-          visit <a href="https://www.amazon.com/gp/digital/fiona/manage#pdocSettings">https://www.amazon.com/gp/digital/fiona/manage#pdocSettings</a>
-        </li>
-        <li>
-          notice you kindle email address, you will want send to yourname@kindle.com for whispernet or yourname@free.kindle.com for free wifi delivery.
-        </li>
-        <li>find the section 'Approved Personal Document E-mail List'</li>
-        <li>
-          add 'kindleizer@mayerdan.com' to the list of approved email addresses
-        </li>
-        <li>
-  Add your email to the form below to pre-fill the email option and make this notice go away. (email is not stored on the server just saved in browser)
-        </li>
-      </ol>
-
-  <form action="#" method="post" id='notice-form'>
-    <label>Kindle Email: 
-      <input type="text" name="email" id="kindle-mail" placeholder="brucewayne@free.kindle.com" />
-    </label>
-    <input type="submit" name="submit" value="Add Email" class="button" />
-  </form>
-
-    </p>
-  </div>
+  <%= erb :setup_notice %>
 
   <h3>Convert RSS feed to Kindle Book</h3>
   <form action="/kindleizeblog" method="post">
