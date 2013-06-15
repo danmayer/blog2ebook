@@ -25,7 +25,7 @@
 
   function showSetup() {
     if(document.cookie.match(/kindle_mail/)==null) {
-      $('#setupNotice').modal();
+      //$('#setupNotice').modal();
     } else {
       var email = readCookie('kindle_mail');
       $('input[name="email"]').val(email);

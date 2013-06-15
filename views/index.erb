@@ -1,16 +1,25 @@
 <div>
-  <h1>Convert your favorite blog to a kindle book</h1>
+  <h1>Convert your favorite blog to a kindle Ebook</h1>
   
-  <p>Blog2Ebook is a tiny app that takes a RSS feed and converts it to a kindle book and emails it to you.</p>
+  <p>
+    Blog2Ebook is a tiny app that takes a Blog (via RSS feed) and converts it to a kindle ebook (Currently only supports the Kindle ebooks).
+    <br/>
+    Blog2Ebook supports importing from 3 different methods to make a book: 
+  </p>
   <ul>
-    <li>Currently only supports the kindle</li>
+    <li>Currently only supports the Kindle</li>
     <li>RSS feed to kindle</li>
     <li>Single post to kindle (useful because some https sites no longer allow bookmarklets)</li>
-    <li>Copied Text to kindle</li>
+    <li>Copied article text to kindle</li>
   </ul>
 
+  <p>
+    Before your kindle account will accept eBooks from this app make sure to follow the <a data-toggle="modal" data-target="#setupNotice">setup instructions</a>.
+  </p>
+
+  <hr/>
   <p class='usage'>
-   Since this uses some free resources, it can only be used a limited number of times a day. There are <span><%= @usage %></span> uses remaining today.  
+   This app relies on free resources, so currently it can only be used a limited number of times a day. There are <span><%= @usage %></span> uses remaining today.  
   </p>
 
   <%= erb :setup_notice %>
