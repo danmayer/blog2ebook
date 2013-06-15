@@ -33,12 +33,6 @@
   }
 
   function attachToDom() {
-    // $('#setup').click(function() {
-    //   window.scrollTo(0,0);
-    //   //$('#setupNotice').modal('toggle');
-    //   return false;
-    // });
-
     $('#notice-form').submit(function() {
       var email = $('#kindle-mail').val();
       if (email.match(/kindle\.com/)!=null) {
