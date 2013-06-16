@@ -1,3 +1,4 @@
+# encoding: UTF-8
 require 'json'
 require 'fileutils'
 require 'rest-client'
@@ -195,7 +196,7 @@ end
 
 def document_from_url(url)
   begin
-    results = RestClient::Request.execute(:method => :get, :url => "http://www.readability.com/api/content/v1/parser?url=#{params['url']}&token=#{READ_API_TOKEN}", :timeout => 10, :open_timeout => 10)
+    results = RestClient::Request.execute(:method => :get, :url => "http://www.readability.com/api/content/v1/parser?url=#{url}&token=#{READ_API_TOKEN}", :timeout => 10, :open_timeout => 10)
     json_results = JSON.parse(results)
     json_results
   rescue RestClient::GatewayTimeout

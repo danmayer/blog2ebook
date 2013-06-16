@@ -17,6 +17,7 @@ group :development, :test do
 #  gem 'ruby-debug19', :require => 'ruby-debug'
    gem 'rack-test'
    gem 'mocha'
+   gem 'pry'
 end
 
 if RbConfig::CONFIG['host_os'] =~ /darwin/
