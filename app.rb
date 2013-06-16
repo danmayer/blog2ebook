@@ -183,7 +183,7 @@ def email_to_kindle(title, content, to_email)
   book = BookFormatter.new(title, content)
   book_file = book.book_file_name(settings.root)
 
-  File.open(book_file, 'w') {|f| f.write(book.formatted_book) }
+  File.open(book_file, 'w', encoding: 'ISO-8859-1') {|f| f.write(book.formatted_book) }
   UsageCount.increase
 
   RestClient.post MAIL_API_URL+"/messages",
