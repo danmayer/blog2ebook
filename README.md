@@ -54,6 +54,8 @@ This is a simple project that started because I was going on a trip and wanted t
   * Crashes on 'http://www.washingtonpost.com/blogs/wonkblog/wp/2013/06/10/going-to-college-is-worth-it-even-if-you-drop-out/'
   * This works to convert html with images to mobi `kindlegen -verbose redis_book/redis_book.html -o redisbook.mobi`
   * foreman start which deals with starting redis etc `redis-server`
+  * Add ability to link to a feed directly with a URL param so it is pre filled
+  * bookmarklet
   
 ## Contributing
 
