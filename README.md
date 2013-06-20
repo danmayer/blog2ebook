@@ -47,12 +47,13 @@ This is a simple project that started because I was going on a trip and wanted t
   * Tests / travis CI (add some travis defaults back to Sinatra template)
   * Download and embed images from posts (likely requires compiling to mobi file)
   * Support multiple book formats possibly using Calibre for converting
-  * Brad Feld's blog has some bad character encoding issues and so does this one 'http://readwrite.com/tags/feed/start/articles.xml''
+  * Brad Feld's blog 'http://feeds.feedburner.com/FeldThoughts' has some bad character encoding issues and so does this one 'http://readwrite.com/tags/feed/start/articles.xml''
   * Add redis free usage tracking, 50 free a day, each purchase turns on a few more free?
   * Stripe purchase integration
   * Support converting github repos to kindle formatted books
   * Crashes on 'http://www.washingtonpost.com/blogs/wonkblog/wp/2013/06/10/going-to-college-is-worth-it-even-if-you-drop-out/'
   * This works to convert html with images to mobi `kindlegen -verbose redis_book/redis_book.html -o redisbook.mobi`
+  * foreman start which deals with starting redis etc `redis-server`
   
 ## Contributing
 
