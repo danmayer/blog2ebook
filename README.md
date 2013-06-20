@@ -56,6 +56,7 @@ This is a simple project that started because I was going on a trip and wanted t
   * foreman start which deals with starting redis etc `redis-server`
   * Add ability to link to a feed directly with a URL param so it is pre filled
   * bookmarklet
+  * Add example formatted blogs such as my dev blog as a single example page
   
 ## Contributing
 
