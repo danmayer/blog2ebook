@@ -49,7 +49,7 @@ To see a a brief overview of the project see my post [Introducing Blog2Ebook](ht
   * Tests / travis CI (add some travis defaults back to Sinatra template)
   * Download and embed images from posts (likely requires compiling to mobi file)
   * Support multiple book formats possibly using Calibre for converting
-  * Brad Feld's blog 'http://feeds.feedburner.com/FeldThoughts' has some bad character encoding issues and so does this one 'http://readwrite.com/tags/feed/start/articles.xml''
+  * Brad Feld's blog 'http://feeds.feedburner.com/FeldThoughts' has some bad character encoding issues and so does this one 'reahttp://readwrite.com/tags/feed/start/articles.xml''
   * Add redis free usage tracking, 50 free a day, each purchase turns on a few more free?
   * Stripe purchase integration
   * Support converting github repos to kindle formatted books
