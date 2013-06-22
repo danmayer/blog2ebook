@@ -1,12 +1,14 @@
 Blog2Ebook
 ===
 
-This is a simple project that started because I was going on a trip and wanted to turn some full blogs into books on my kindle.
+This is a simple project that started because I was going on a trip and wanted to turn some full blogs into books on my kindle. Take your blogs on the go, or just enjoy reading on a kindle screen more than a computer screen this project can help.
 
 * Currently supports only Kindle
   * RSS feed to kindle
   * Single post to kindle (useful because some https sites no longer allow bookmarklets to work)
   * Copied Text to kindle 
+
+To see a a brief overview of the project see my post [Introducing Blog2Ebook](http://mayerdan.com/ruby/2013/06/20/introducing-blog2ebook/)
 
 ## To Run Locally
 

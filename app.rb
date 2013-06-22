@@ -9,6 +9,7 @@ require 'email_veracity'
 require 'redis'
 require './lib/book_formatter'
 require './lib/document_fetching'
+require './lib/book_delivery'
 require './lib/redis_initializer'
 
 MAIL_API_KEY = ENV['MAILGUN_API_KEY']
@@ -45,7 +46,7 @@ get_or_post '/kindleizecontent' do
   title    = content.split("\n").first
   to_email = params['email']
 
-  email_to_kindle(title, content, to_email)
+  BookDelivery.email_to_kindle(title, content, to_email)
   success_response('Your content is being emailed to your kindle shortly.')
 end
 
@@ -57,7 +58,7 @@ get_or_post '/kindleize' do
   title    = doc['title'] 
   to_email = params['email']
 
-  email_to_kindle(title, content, to_email)
+  BookDelivery.email_to_kindle(title, content, to_email)
   success_response('Your article will be emailed to your kindle shortly.')
 end
 
@@ -71,7 +72,7 @@ get_or_post '/kindleizeblog' do
     to_email = params['email']
 
     puts "emailing #{title} to #{to_email} content #{content.length}"
-    response = email_to_kindle(title, content, to_email)
+    BookDelivery.email_to_kindle(title, content, to_email)
     success_response('Your book is being emailed to your kindle shortly.')
   rescue => error
     error_response("There was a error building your book sorry about that please let me know what problems you had: #{error.message}")
@@ -172,22 +173,4 @@ def verify_email
       end
     end
   end
-end
-
-def email_to_kindle(title, content, to_email)
-  # TODO (update template project as well) heroku needs tmp have sinatra template always include the directory but ignore all files
-  `mkdir -p #{settings.root}/tmp`
-
-  book = BookFormatter.new(title, content)
-  book_file = book.book_file_name(settings.root)
-
-  File.open(book_file, 'w', encoding: 'ISO-8859-1') {|f| f.write(book.formatted_book.gsub(/(’|’)/,"'").encode('ISO-8859-1', {:invalid => :replace, :undef => :replace, :replace => '?'})) }
-  UsageCount.increase
-
-  RestClient.post MAIL_API_URL+"/messages",
-  :from => "kindleizer@mayerdan.com",
-  :to => to_email,
-  :subject => "kindle book",
-  :text => 'kindle book attached',
-  :attachment => File.new(book_file)
 end

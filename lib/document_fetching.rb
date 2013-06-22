@@ -1,5 +1,6 @@
-require 'pismo'
-require 'readability'
+# Currently disabled gems use for testing improved single article porting
+#require 'pismo'
+#require 'readability'
 
 class DocumentFetching
   READ_API_TOKEN = ENV['READ_API_TOKEN']
