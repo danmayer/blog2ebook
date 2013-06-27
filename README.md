@@ -12,16 +12,21 @@ To see a a brief overview of the project see my post [Introducing Blog2Ebook](ht
 
 ## To Run Locally
 
+    foreman start
+    open http://localhost:3000
+    
+    #old way
     bundle exec rackup -p 3000
+    redis-server
     open http://localhost:3000
 
 
 ## Examples
 
-    open http://localhost:3000/kindleizeblog?url=http://mayerdan.com/atom.xml
-    open http://localhost:3000/kindleizeblog?url=http://erinashleymiller.com/feed/
-    open http://localhost:3000/kindleizeblog?url=http://codeascraft.com/feed/
-    open http://localhost:3000/kindleizeblog?url=http://techblog.netflix.com/rss.xml
+    open "http://localhost:3000/kindleizeblog?url=http://mayerdan.com/atom.xml&email=YOUREMAIL@gmail.com"
+    open "http://localhost:3000/kindleizeblog?url=http://erinashleymiller.com/feed/&email=YOUREMAIL@gmail.com"
+    open "http://localhost:3000/kindleizeblog?url=http://codeascraft.com/feed/&email=YOUREMAIL@gmail.com"
+    open "http://localhost:3000/kindleizeblog?url=http://techblog.netflix.com/rss.xml&email=YOUREMAIL@gmail.com"
 
 ## Useful related links
 
@@ -52,9 +57,8 @@ To see a a brief overview of the project see my post [Introducing Blog2Ebook](ht
   * Add redis free usage tracking, 50 free a day, each purchase turns on a few more free?
   * Stripe purchase integration
   * Support converting github repos to kindle formatted books
-  * Crashes on 'http://www.washingtonpost.com/blogs/wonkblog/wp/2013/06/10/going-to-college-is-worth-it-even-if-you-drop-out/'
+  * Crashes on single article 'http://www.washingtonpost.com/blogs/wonkblog/wp/2013/06/10/going-to-college-is-worth-it-even-if-you-drop-out/'
   * This works to convert html with images to mobi `kindlegen -verbose redis_book/redis_book.html -o redisbook.mobi`
-  * foreman start which deals with starting redis etc `redis-server`
   * Add ability to link to a feed directly with a URL param so it is pre filled
   * bookmarklet
   * Add example formatted blogs such as my dev blog as a single example page

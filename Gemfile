@@ -21,4 +21,5 @@ group :development, :test do
    gem 'rack-test'
    gem 'mocha'
    gem 'pry'
+   gem 'foreman'
 end
