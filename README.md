@@ -59,6 +59,7 @@ To see a a brief overview of the project see my post [Introducing Blog2Ebook](ht
   * Support converting github repos to kindle formatted books
   * Crashes on single article 'http://www.washingtonpost.com/blogs/wonkblog/wp/2013/06/10/going-to-college-is-worth-it-even-if-you-drop-out/'
   * Add ability to link to a feed directly with a URL param so it is pre filled
+    * linking to a endpoint is done… need to link to root with pre filled still
   * bookmarklet
   * Add example formatted blogs such as my dev blog as a single example page
   
