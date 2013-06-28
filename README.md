@@ -53,12 +53,11 @@ To see a a brief overview of the project see my post [Introducing Blog2Ebook](ht
 
   * Tests / travis CI (add some travis defaults back to Sinatra template)
   * Download and embed images from posts (likely requires compiling to mobi file)
+  * This works to convert html with images to mobi `kindlegen -verbose redis_book/redis_book.html -o redisbook.mobi`
   * Support multiple book formats possibly using Calibre for converting
-  * Add redis free usage tracking, 50 free a day, each purchase turns on a few more free?
   * Stripe purchase integration
   * Support converting github repos to kindle formatted books
   * Crashes on single article 'http://www.washingtonpost.com/blogs/wonkblog/wp/2013/06/10/going-to-college-is-worth-it-even-if-you-drop-out/'
-  * This works to convert html with images to mobi `kindlegen -verbose redis_book/redis_book.html -o redisbook.mobi`
   * Add ability to link to a feed directly with a URL param so it is pre filled
   * bookmarklet
   * Add example formatted blogs such as my dev blog as a single example page

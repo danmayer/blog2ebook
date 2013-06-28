@@ -44,7 +44,7 @@ get_or_post '/kindleizecontent' do
   verify_usage
   content  = params['content']
   title    = content.split("\n").first
-  to_email = params['email']
+  to_email = user_email
 
   BookDelivery.email_to_kindle(title, content, to_email)
   success_response('Your content is being emailed to your kindle shortly.')
@@ -56,7 +56,7 @@ get_or_post '/kindleize' do
   doc      = DocumentFetching.new(params['url']).document_from_url
   content  = doc['content']
   title    = doc['title'] 
-  to_email = params['email']
+  to_email = user_email
 
   BookDelivery.email_to_kindle(title, content, to_email)
   success_response('Your article will be emailed to your kindle shortly.')
@@ -69,7 +69,7 @@ get_or_post '/kindleizeblog' do
     doc      = DocumentFetching.new(params['url']).document_from_feed
     content  = doc[:content]
     title    = doc[:title] 
-    to_email = params['email']
+    to_email = user_email
 
     puts "emailing #{title} to #{to_email} content #{content.length}"
     BookDelivery.email_to_kindle(title, content, to_email)
@@ -80,6 +80,10 @@ get_or_post '/kindleizeblog' do
 end
 
 private
+
+def user_email
+  params['email'] || request.cookies["kindle_mail"]
+end
 
 def verify_usage
   unless UsageCount.usage_remaining > 0
@@ -122,7 +126,7 @@ def success_response(notice)
 end
 
 def verify_url_and_email
-  unless params['url'].to_s.length > 1 && params['email'].to_s.length > 1
+  unless params['url'].to_s.length > 1 && user_email.to_s.length > 1
     request.accept.each do |type|
       case type
       when 'text/json'
@@ -137,7 +141,7 @@ def verify_url_and_email
 end
 
 def verify_content_and_email
-  unless params['content'].to_s.length > 1 && params['email'].to_s.length > 1
+  unless params['content'].to_s.length > 1 && user_email.to_s.length > 1
     request.accept.each do |type|
       case type
       when 'text/json'
@@ -152,7 +156,7 @@ def verify_content_and_email
 end
 
 def verify_email
-  address = EmailVeracity::Address.new(params['email'])
+  address = EmailVeracity::Address.new(user_email)
   request.accept.each do |type|
     case type
     when 'text/json'
