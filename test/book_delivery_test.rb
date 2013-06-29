@@ -7,8 +7,14 @@ require 'mocha/setup'
 
 class BookDeliveryTest < Test::Unit::TestCase
 
+  def setup
+    REDIS.stubs(:incr).returns(1)
+    REDIS.stubs(:get).returns(2)
+  end
+
   def test_email_to_kindle
     File.expects(:open)
+    File.stubs(:new).returns("")
     RestClient.expects(:post)
     formatted_book = BookDelivery.email_to_kindle("title", "content", "fake@email")
   end
