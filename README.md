@@ -29,6 +29,7 @@ This project runs [travis-ci.org](http://travis-ci.org)
 
 ## Examples
 
+    open "http://localhost:3000/?url=http://mayerdan.com/atom.xml"
     open "http://localhost:3000/kindleizeblog?url=http://mayerdan.com/atom.xml&email=YOUREMAIL@gmail.com"
     open "http://localhost:3000/kindleizeblog?url=http://erinashleymiller.com/feed/&email=YOUREMAIL@gmail.com"
     open "http://localhost:3000/kindleizeblog?url=http://codeascraft.com/feed/&email=YOUREMAIL@gmail.com"
