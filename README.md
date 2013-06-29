@@ -10,6 +10,12 @@ This is a simple project that started because I was going on a trip and wanted t
 
 To see a a brief overview of the project see my post [Introducing Blog2Ebook](http://mayerdan.com/ruby/2013/06/20/introducing-blog2ebook/)
 
+## CI Build Status
+
+[![Build Status](https://secure.travis-ci.org/danmayer/blog2ebook.png)](http://travis-ci.org/danmayer/blog2ebook)
+
+This project runs [travis-ci.org](http://travis-ci.org)
+
 ## To Run Locally
 
     foreman start
@@ -51,7 +57,6 @@ To see a a brief overview of the project see my post [Introducing Blog2Ebook](ht
 
 ## TODO
 
-  * Tests / travis CI (add some travis defaults back to Sinatra template)
   * Download and embed images from posts (likely requires compiling to mobi file)
   * This works to convert html with images to mobi `kindlegen -verbose redis_book/redis_book.html -o redisbook.mobi`
   * Support multiple book formats possibly using Calibre for converting
