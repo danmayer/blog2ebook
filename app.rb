@@ -27,6 +27,23 @@ use Rack::Session::Cookie, :key => 'kindleizer.rack.session',
 use Rack::Flash, :sweep => true
 
 helpers do
+
+  def possilbe_url_value
+    if url = params['url']
+      "value = '#{url}'"
+    else
+      ''
+    end
+  end
+
+  def possilbe_content_value
+    if content = params['content']
+      content
+    else
+      ''
+    end
+  end
+
 end
 
 def self.get_or_post(url,&block)

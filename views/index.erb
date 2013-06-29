@@ -27,7 +27,7 @@
   <h3>Convert RSS feed to Kindle Book</h3>
   <form action="/kindleizeblog" method="post">
     <label>RSS feed url: 
-      <input type="text" name="url" placeholder="http://codeascraft.com/feed/" />
+      <input type="text" name="url" placeholder="http://codeascraft.com/feed/" <%= possilbe_url_value %> />
     </label><br/>
     <label>Kindle Email: 
       <input type="text" name="email" placeholder="brucewayne@free.kindle.com" />
@@ -38,7 +38,7 @@
   <h3>Send Single Article</h3>
   <form action="/kindleize" method="post">
     <label>Single Article url: 
-      <input type="text" name="url" placeholder="http://matt.might.net/articles/hacking-strength/" />
+      <input type="text" name="url" placeholder="http://matt.might.net/articles/hacking-strength/" <%= possilbe_url_value %> />
     </label><br/>
     <label>Kindle Email: 
       <input type="text" name="email" placeholder="brucewayne@free.kindle.com" />
@@ -54,7 +54,7 @@
     <input type="submit" name="submit" value="Kindleize It" class="button stacked" />
     <br/>
     <label>Content: 
-      <textarea name="content" placeholder="pasted in content"></textarea>
+      <textarea name="content" placeholder="pasted in content"><%= possilbe_content_value %></textarea>
     </label><br/>
   </form>
 </div>

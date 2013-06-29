@@ -8,12 +8,12 @@ class BookFormatter
     self.content = content
   end
 
-  def underscored_title
-    title.gsub(' ','_')
+  def formatted_title
+    title.gsub('.',' ')
   end
 
   def book_file_name(root)
-    "#{root}/tmp/#{underscored_title}.html"
+    "#{root}/tmp/#{formatted_title}.html"
   end
 
   def formatted_book
