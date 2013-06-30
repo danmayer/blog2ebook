@@ -59,11 +59,13 @@ This project runs [travis-ci.org](http://travis-ci.org)
 ## TODO
 
   * Download and embed images from posts (likely requires compiling to mobi file)
-  * This works to convert html with images to mobi `kindlegen -verbose redis_book/redis_book.html -o redisbook.mobi`
-  * Support multiple book formats possibly using Calibre for converting
-  * Stripe purchase integration
+    * This works to convert html with images to mobi `kindlegen -verbose redis_book/redis_book.html -o redisbook.mobi`
   * Support converting github repos to kindle formatted books
   * Crashes on single article 'http://www.washingtonpost.com/blogs/wonkblog/wp/2013/06/10/going-to-college-is-worth-it-even-if-you-drop-out/'
+  * Stripe purchase integration
+  * Support multiple book formats possibly using Calibre for converting
+  * improve default styles around the example formatted page it gives a bad impression.
+  * Support file upload to package up and publish book to amazon, or at least allow authors to preview on kindle. This would be work to support / Steve / Erin guides.
   
 ## Contributing
 
