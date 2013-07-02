@@ -20,6 +20,7 @@ This project runs [travis-ci.org](http://travis-ci.org)
 
 ##### To Run locally Configure your environment
 
+    #(on time setup in ~/.profile or equivalent)
     #available free at mail gun
     MAILGUN_API_KEY=XXX_get_your_own_token
     #available free at readability

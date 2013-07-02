@@ -2,5 +2,6 @@
 tmp/
 log/sinatra.log
 artifacts/*
-log/
+log/*
 .yardoc/
+!.gitignore
