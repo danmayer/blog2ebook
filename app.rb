@@ -51,7 +51,7 @@ def self.get_or_post(url,&block)
   post(url,&block)
 end
 
-get '/' do
+get_or_post '/' do
   @usage = UsageCount.usage_remaining
   erb :index
 end
