@@ -4,6 +4,11 @@ require 'fileutils'
 require 'rest-client'
 require 'open-uri'
 require 'openssl'
+module OpenSSL
+  module SSL
+    remove_const :VERIFY_PEER
+  end
+end
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 require 'nokogiri'
 require 'rack-flash'
