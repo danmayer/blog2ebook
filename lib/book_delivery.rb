@@ -8,6 +8,7 @@ class BookDelivery
 
     book = BookFormatter.new(title, content)
     book_file = book.book_file_name(settings.root)
+    `mkdir -p #{settings.root}/tmp/#{title.gsub(/( |\.)/,'_')}`
 
     File.open(book_file, 'w', encoding: 'ISO-8859-1') {|f| f.write(book.formatted_book) }
 
