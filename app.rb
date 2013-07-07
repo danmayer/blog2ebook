@@ -45,6 +45,10 @@ helpers do
     end
   end
 
+  def load_image_option_value
+    (ENV['RACK_ENV']=='production' && params['load_images'] || ENV['RACK_ENV']!='production')
+  end
+
 end
 
 def self.get_or_post(url,&block)
@@ -84,7 +88,8 @@ get_or_post '/kindleizeblog' do
   begin
     verify_url_and_email
     verify_usage
-    doc      = DocumentFetching.new(params['url']).document_from_feed
+    options = {'load_images' => load_image_option_value}
+    doc      = DocumentFetching.new(params['url']).document_from_feed(options)
     content  = doc[:content]
     title    = doc[:title] 
     to_email = user_email

@@ -44,7 +44,7 @@ class DocumentFetching
   #
   # TODO move more to book_formatter
   ###
-  def document_from_feed
+  def document_from_feed(options = {})
     results = RestClient.get(@url)
     xml_doc  = Nokogiri::XML::Document.parse(results)
     
@@ -68,9 +68,12 @@ class DocumentFetching
     end
     table_of_content += "</ul><hr/><mbp:pagebreak />"
     content = "#{book_start}#{table_of_content}#{content}"
-    
-    content = filter_for_images(content)
-    download_document_images(xml_doc)
+
+    if(options['load_images'])
+      content = filter_for_images(content)
+      download_document_images(xml_doc)
+    end
+
     {:title => title, :content => content}
   end
 

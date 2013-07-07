@@ -11,11 +11,13 @@ class BookDelivery
 
     File.open(book_file, 'w', encoding: 'ISO-8859-1') {|f| f.write(book.formatted_book) }
 
-    kindle_gen_cmd = "kindlegen -verbose \"#{book_file}\" -o \"#{book.formatted_title}.mobi\""
-    puts "cmd: #{kindle_gen_cmd}"
-    conversion_results = `#{kindle_gen_cmd}`
-    puts conversion_results
-
+    if ENV['RACK_ENV']=='production' && content.match(/img.*src/)
+      kindle_gen_cmd = "kindlegen -verbose \"#{book_file}\" -o \"#{book.formatted_title}.mobi\""
+      puts "cmd: #{kindle_gen_cmd}"
+      conversion_results = `#{kindle_gen_cmd}`
+      puts conversion_results
+    end
+    
     UsageCount.increase
 
     RestClient.post MAIL_API_URL+"/messages",
