@@ -3,6 +3,8 @@ require 'json'
 require 'fileutils'
 require 'rest-client'
 require 'open-uri'
+require 'openssl'
+OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 require 'nokogiri'
 require 'rack-flash'
 require 'email_veracity'
