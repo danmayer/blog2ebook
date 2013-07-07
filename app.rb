@@ -53,7 +53,7 @@ helpers do
   end
 
   def load_image_option_value
-    (ENV['RACK_ENV']=='production' && params['load_images'] || ENV['RACK_ENV']!='production')
+    (ENV['RACK_ENV']=='production' && params['load_images']=='true' || ENV['RACK_ENV']!='production')
   end
 
 end
@@ -101,7 +101,7 @@ get_or_post '/kindleizeblog' do
     title    = doc[:title] 
     to_email = user_email
     
-    if ENV['RACK_ENV']=='production' && content.match(/img.*src/)
+    if ENV['RACK_ENV']=='production' && content.match(/img.*src/) && !load_image_option_value
       puts "delivering #{title} via deferred server"
       BookDelivery.deliver_via_deferred_server(request)
       success_response('Your book is being generated and emailed to your kindle shortly.')
