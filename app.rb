@@ -100,7 +100,8 @@ get_or_post '/kindleizeblog' do
     content  = doc[:content]
     title    = doc[:title] 
     to_email = user_email
-    
+    puts "current image option #{load_image_option_value}"
+
     if ENV['RACK_ENV']=='production' && content.match(/img.*src/) && !load_image_option_value
       puts "delivering #{title} via deferred server"
       BookDelivery.deliver_via_deferred_server(request)
