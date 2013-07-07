@@ -70,8 +70,6 @@ This project runs [travis-ci.org](http://travis-ci.org)
 
 ## TODO
 
-  * Download and embed images from posts (likely requires compiling to mobi file)
-    * This works to convert html with images to mobi `kindlegen -verbose redis_book/redis_book.html -o redisbook.mobi`
   * 'http://codeascraft.com/feed/' doesn't include full article text, possibly gather some from feed them hit article URL for full article content  
   * Support converting github repos to kindle formatted books
   * Crashes on single article 'http://www.washingtonpost.com/blogs/wonkblog/wp/2013/06/10/going-to-college-is-worth-it-even-if-you-drop-out/'
