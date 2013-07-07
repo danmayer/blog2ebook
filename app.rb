@@ -53,7 +53,7 @@ helpers do
   end
 
   def load_image_option_value
-    (ENV['RACK_ENV']=='production' && params['load_images']=='true' || ENV['RACK_ENV']!='production')
+    ((ENV['RACK_ENV']=='production' && params['load_images']=='true') || ENV['RACK_ENV']!='production')
   end
 
 end
