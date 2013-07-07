@@ -9,6 +9,19 @@ class DocumentFetching
     @url = url
   end
 
+  # Pismo
+  # doc = Pismo::Document.new(params['url'])
+  # {:content => doc.html_body}.to_json
+
+  #ruby-readability
+  #source = open('http://mayerdan.com/2013/05/08/performance_bugs_cluster/')
+  # {:content => Readability::Document.new(source).content}
+
+  ###
+  # Above examples are using other parsers
+  # currently just using readbilty api
+  # this isn't really the best support, clearly more focused on RSS feeds
+  ###
   def document_from_url
     begin
       results = RestClient::Request.execute(:method => :get, :url => "http://www.readability.com/api/content/v1/parser?url=#{@url}&token=#{READ_API_TOKEN}", :timeout => 10, :open_timeout => 10)
@@ -18,14 +31,6 @@ class DocumentFetching
       error_response("Hmmm looks like I can't reach that article.")
     end
   end
-
-  # Pismo
-  # doc = Pismo::Document.new(params['url'])
-  # {:content => doc.html_body}.to_json
-
-  #ruby-readability
-  #source = open('http://mayerdan.com/2013/05/08/performance_bugs_cluster/')
-  # {:content => Readability::Document.new(source).content}
 
   ####
   # Method converts data from a feed format to a html kindle book format
@@ -63,11 +68,55 @@ class DocumentFetching
     end
     table_of_content += "</ul><hr/><mbp:pagebreak />"
     content = "#{book_start}#{table_of_content}#{content}"
-
+    
+    content = filter_for_images(content)
+    download_document_images(xml_doc)
     {:title => title, :content => content}
   end
 
   private
+
+  def download_document_images(xml_doc)
+    images = []
+
+    xml_doc.document.css('entry').css('content').children.each do |child|
+      Nokogiri::HTML(child.text).css('img').each do |node|
+        images << node.attributes['src'].value
+      end
+    end
+
+    puts "downloading #{images.length} images"
+    title = title_from_feed(xml_doc).gsub(/( |\.)/,'_')
+
+    unless File.exists?("./tmp/#{title}")
+      puts "making directory"
+      `mkdir ./tmp/#{title}` 
+    end
+
+    images.each do |image_url|
+      filename = "./tmp/#{title}/#{image_url.split('/').last}"
+      open(filename, 'wb') do |file|
+        begin
+          file << open(image_url).read
+        rescue Errno::ECONNRESET, Errno::ENOENT, SocketError
+          puts "skipping #{image_url}"
+        end
+      end
+    end
+  end
+
+  def filter_for_images(content)
+    images = content.scan(/src="(.*?)"/)
+    images += content.scan(/src='(.*?)'/)
+    images = images.flatten
+    puts "replacing #{images.length} images"
+    images.each do |image_src|
+      local_src = "./#{image_src.split('/').last}"
+      puts "replacing #{image_src} with #{local_src}"
+      content = content.gsub(image_src, local_src)
+    end
+    content
+  end
 
   def title_from_feed(xml_doc)
     title = xml_doc.search('title').first.content

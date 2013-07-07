@@ -7,6 +7,7 @@ gem 'nokogiri'
 gem 'rack-flash3'
 gem 'email_veracity'
 gem 'redis'
+gem 'addressable'
 
 #enable https
 #gem 'rack-ssl-enforcer'

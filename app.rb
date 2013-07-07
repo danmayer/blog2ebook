@@ -7,6 +7,7 @@ require 'nokogiri'
 require 'rack-flash'
 require 'email_veracity'
 require 'redis'
+require 'addressable/uri'
 require './lib/book_formatter'
 require './lib/document_fetching'
 require './lib/book_delivery'
@@ -87,11 +88,18 @@ get_or_post '/kindleizeblog' do
     content  = doc[:content]
     title    = doc[:title] 
     to_email = user_email
-
-    puts "emailing #{title} to #{to_email} content #{content.length}"
-    BookDelivery.email_to_kindle(title, content, to_email)
+    
+    if ENV['RACK_ENV']=='production' && content.match(/img.*src/)
+      puts "delivering #{title} via deferred server"
+      BookDelivery.deliver_via_deferred_server(request)
+    else
+      puts "emailing #{title} to #{to_email} content #{content.length}"
+      BookDelivery.email_to_kindle(title, content, to_email)
+    end
     success_response('Your book is being emailed to your kindle shortly.')
   rescue => error
+    puts "error during book building #{error.class}"
+    puts error.backtrace.join("\n")
     error_response("There was a error building your book sorry about that please let me know what problems you had: #{error.message}")
   end
 end
