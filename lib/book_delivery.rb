@@ -11,12 +11,14 @@ class BookDelivery
     `mkdir -p #{settings.root}/tmp/#{title.gsub(/( |\.)/,'_')}`
 
     File.open(book_file, 'w', encoding: 'ISO-8859-1') {|f| f.write(book.formatted_book) }
+    delivery_file = book_file
 
     if ENV['RACK_ENV']=='production' && content.match(/img.*src/)
       kindle_gen_cmd = "kindlegen -verbose \"#{book_file}\" -o \"#{book.formatted_title}.mobi\""
       puts "cmd: #{kindle_gen_cmd}"
       conversion_results = `#{kindle_gen_cmd}`
       puts conversion_results
+      delivery_file = book_file.gsub('.html','.mobi')
     end
     
     UsageCount.increase
@@ -26,7 +28,7 @@ class BookDelivery
     :to => to_email,
     :subject => "kindle book",
     :text => 'kindle book attached',
-    :attachment => File.new(book_file.gsub('.html','.mobi'))
+    :attachment => File.new(delivery_file)
   end
 
   def self.deliver_via_deferred_server(request)
