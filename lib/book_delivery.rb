@@ -30,7 +30,7 @@ class BookDelivery
 
   def self.deliver_via_deferred_server(request)
     uri = Addressable::URI.new
-    uri.query_values = request.params 
+    uri.query_values = request.params.merge('load_images' => true)
     request_endpoint = "#{request.path}?#{uri.query}"
 
     RestClient.post DEFERRED_SERVER_ENDPOINT,
