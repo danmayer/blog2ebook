@@ -82,12 +82,21 @@ end
 get_or_post '/kindleize' do
   verify_url_and_email
   verify_usage
-  doc      = DocumentFetching.new(params['url']).document_from_url
-  content  = doc['content']
-  title    = doc['title'] 
-  to_email = user_email
-
-  BookDelivery.email_to_kindle(title, content, to_email)
+  if params['url'].match(/\.pdf/)
+    doc      = DocumentFetching.new(params['url']).file_from_url
+    content  = doc['content']
+    title    = doc['title'] 
+    to_email = user_email
+    
+    BookDelivery.email_file_to_kindle(title, content, to_email)
+  else
+    doc      = DocumentFetching.new(params['url']).document_from_url
+    content  = doc['content']
+    title    = doc['title'] 
+    to_email = user_email
+    
+    BookDelivery.email_to_kindle(title, content, to_email)
+  end
   success_response('Your article will be emailed to your kindle shortly.')
 end
 

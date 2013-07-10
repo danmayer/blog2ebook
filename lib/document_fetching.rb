@@ -32,6 +32,16 @@ class DocumentFetching
     end
   end
 
+  def file_from_url
+    begin
+      file_name = @url.split('/').last
+      file_contents = RestClient::Request.execute(:method => :get, :url => @url, :timeout => 10, :open_timeout => 10)
+      {'content' => file_contents, 'title' => file_name}
+    rescue RestClient::GatewayTimeout
+      error_response("Hmmm looks like I can't reach that file.")
+    end
+  end
+
   ####
   # Method converts data from a feed format to a html kindle book format
   # 
