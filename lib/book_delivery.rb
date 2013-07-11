@@ -61,10 +61,9 @@ class BookDelivery
                                           :timeout => 14, 
                                           :open_timeout => 8)
       
-      resource.post DEFERRED_SERVER_ENDPOINT,
-      :signature => BLOG_TO_BOOK_TOKEN,
-      :project => 'danmayer/blog2ebook',
-      :project_request => request_endpoint
+      resource.post(:signature => BLOG_TO_BOOK_TOKEN,
+                    :project => 'danmayer/blog2ebook',
+                    :project_request => request_endpoint)
     rescue RestClient::RequestTimeout
       raise "Sorry, accessing book generator failed, please try again... As it might be waking up from sleeping."
     end
