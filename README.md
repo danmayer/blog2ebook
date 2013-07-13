@@ -70,7 +70,9 @@ This project runs [travis-ci.org](http://travis-ci.org)
 
 ## TODO
 
-  * 'http://codeascraft.com/feed/' doesn't include full article text, possibly gather some from feed them hit article URL for full article content  
+  * one input for any URL then detect if it is a single article or a feed. You can then provide the best option / conversion by default.
+  * 'http://codeascraft.com/feed/' doesn't include full article text, possibly gather some from feed them hit article URL for full article content 
+  * Add ability to preview 
   * Support converting github repos to kindle formatted books
   * Crashes on single article 'http://www.washingtonpost.com/blogs/wonkblog/wp/2013/06/10/going-to-college-is-worth-it-even-if-you-drop-out/'
   * Stripe purchase integration
