@@ -89,12 +89,20 @@ class DocumentFetching
 
   private
 
+  def url_base
+    @url_base ||= "#{URI.parse(@url).scheme}://#{URI.parse(@url).host}/"
+  end
+
   def download_document_images(xml_doc)
     images = []
 
     xml_doc.document.css('entry').css('content').children.each do |child|
       Nokogiri::HTML(child.text).css('img').each do |node|
-        images << node.attributes['src'].value
+        img_url = node.attributes['src'].value
+        unless img_url.match(/:\/\//)
+          img_url = "#{url_base}#{img_url}"         
+        end
+        images << img_url
       end
     end
 
