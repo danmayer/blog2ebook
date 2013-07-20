@@ -63,6 +63,12 @@ def self.get_or_post(url,&block)
   post(url,&block)
 end
 
+before /.*/ do
+  if request.host.match(/herokuapp.com/)
+    redirect request.url.gsub("herokuapp.com",'picoappz.com'), 301
+  end
+end
+
 get_or_post '/' do
   @usage = UsageCount.usage_remaining
   erb :index
