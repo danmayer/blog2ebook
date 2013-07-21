@@ -28,9 +28,9 @@ set :root, File.dirname(__FILE__)
 enable :logging
 
 use Rack::Session::Cookie, :key => 'kindleizer.rack.session',
-                           :path => '/',
-                           :expire_after => 2592000, # In seconds
-                           :secret => "update_secret_#{ENV['MAILGUN_API_KEY']}"
+:path => '/',
+:expire_after => 2592000, # In seconds
+:secret => "update_secret_#{ENV['MAILGUN_API_KEY']}"
 
 use Rack::Flash, :sweep => true
 
@@ -58,15 +58,15 @@ helpers do
 
 end
 
-def self.get_or_post(url,&block)
-  get(url,&block)
-  post(url,&block)
-end
-
 before /.*/ do
   if request.host.match(/herokuapp.com/)
     redirect request.url.gsub("herokuapp.com",'picoappz.com'), 301
   end
+end
+
+def self.get_or_post(url,&block)
+  get(url,&block)
+  post(url,&block)
 end
 
 get_or_post '/' do
@@ -88,15 +88,40 @@ end
 get_or_post '/kindleize' do
   verify_url_and_email
   verify_usage
-  if params['url'].match(/\.pdf/)
-    doc      = DocumentFetching.new(params['url']).file_from_url
+  document_fetcher = DocumentFetching.new(params['url'])
+
+  if params['url'].match(/\.rss/) || params['url'].match(/\.atom/) || params['url'].match(/\.xml/) || document_fetcher.rss_content?
+    begin
+      options = {'load_images' => load_image_option_value}
+      doc      = document_fetcher.document_from_feed(options)
+      content  = doc[:content]
+      title    = doc[:title] 
+      to_email = user_email
+
+      puts "current env #{ENV['RACK_ENV']} content match #{content.match(/img.*src/)} image option #{load_image_option_value}"
+      if ENV['RACK_ENV']=='production' && content.match(/img.*src/) && !load_image_option_value
+        puts "delivering #{title} via deferred server"
+        BookDelivery.deliver_via_deferred_server(request)
+        success_response('Your book is being generated and emailed to your kindle shortly.')
+      else
+        puts "emailing #{title} to #{to_email} content #{content.length}"
+        BookDelivery.email_to_kindle(title, content, to_email)
+        success_response('Your book is being emailed to your kindle shortly.')
+      end
+    rescue => error
+      puts "error during book building #{error.class}"
+      puts error.backtrace.join("\n")
+      error_response("There was a error building your book sorry about that please let me know what problems you had: #{error.message}")
+    end
+  elsif params['url'].match(/\.pdf/)
+    doc      = document_fetcher.file_from_url
     content  = doc['content']
     title    = doc['title'] 
     to_email = user_email
     
     BookDelivery.email_file_to_kindle(title, content, to_email)
   else
-    doc      = DocumentFetching.new(params['url']).document_from_url
+    doc      = document_fetcher.document_from_url
     content  = doc['content']
     title    = doc['title'] 
     to_email = user_email
@@ -104,33 +129,6 @@ get_or_post '/kindleize' do
     BookDelivery.email_to_kindle(title, content, to_email)
   end
   success_response('Your article will be emailed to your kindle shortly.')
-end
-
-get_or_post '/kindleizeblog' do
-  begin
-    verify_url_and_email
-    verify_usage
-    options = {'load_images' => load_image_option_value}
-    doc      = DocumentFetching.new(params['url']).document_from_feed(options)
-    content  = doc[:content]
-    title    = doc[:title] 
-    to_email = user_email
-
-    puts "current env #{ENV['RACK_ENV']} content match #{content.match(/img.*src/)} image option #{load_image_option_value}"
-    if ENV['RACK_ENV']=='production' && content.match(/img.*src/) && !load_image_option_value
-      puts "delivering #{title} via deferred server"
-      BookDelivery.deliver_via_deferred_server(request)
-      success_response('Your book is being generated and emailed to your kindle shortly.')
-    else
-      puts "emailing #{title} to #{to_email} content #{content.length}"
-      BookDelivery.email_to_kindle(title, content, to_email)
-      success_response('Your book is being emailed to your kindle shortly.')
-    end
-  rescue => error
-    puts "error during book building #{error.class}"
-    puts error.backtrace.join("\n")
-    error_response("There was a error building your book sorry about that please let me know what problems you had: #{error.message}")
-  end
 end
 
 private

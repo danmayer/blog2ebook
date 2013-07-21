@@ -9,6 +9,10 @@ class DocumentFetching
     @url = url
   end
 
+  def rss_content?
+    file_content_from_url.match(/<rss/)
+  end
+
   # Pismo
   # doc = Pismo::Document.new(params['url'])
   # {:content => doc.html_body}.to_json
@@ -35,7 +39,7 @@ class DocumentFetching
   def file_from_url
     begin
       file_name = @url.split('/').last
-      file_contents = RestClient::Request.execute(:method => :get, :url => URI.escape(@url), :timeout => 10, :open_timeout => 10)
+      file_contents = file_content_from_url
       {'content' => file_contents, 'title' => file_name}
     rescue RestClient::GatewayTimeout
       error_response("Hmmm looks like I can't reach that file.")
@@ -55,7 +59,7 @@ class DocumentFetching
   # TODO move more to book_formatter
   ###
   def document_from_feed(options = {})
-    results = RestClient.get(@url)
+    results = file_content_from_url
     xml_doc  = Nokogiri::XML::Document.parse(results)
     
     title = title_from_feed(xml_doc)
@@ -88,6 +92,10 @@ class DocumentFetching
   end
 
   private
+
+  def file_content_from_url
+    @file_contents ||= RestClient::Request.execute(:method => :get, :url => URI.escape(@url), :timeout => 10, :open_timeout => 10)
+  end
 
   def url_base
     @url_base ||= "#{URI.parse(@url).scheme}://#{URI.parse(@url).host}/"

@@ -24,21 +24,10 @@
 
   <%= erb :setup_notice %>
 
-  <h3>Convert RSS feed to Kindle Book</h3>
-  <form action="/kindleizeblog" method="post">
+  <h3>Convert RSS feed (or single article URL) to Kindle Book</h3>
+  <form action="/kindleize" method="post">
     <label>RSS feed url: 
       <input type="text" name="url" placeholder="http://codeascraft.com/feed/" <%= possilbe_url_value %> />
-    </label><br/>
-    <label>Kindle Email: 
-      <input type="text" name="email" placeholder="brucewayne@free.kindle.com" />
-    </label><br/>
-    <input type="submit" name="submit" value="Kindleize It" class="button" />
-  </form>
-
-  <h3>Send Single Article</h3>
-  <form action="/kindleize" method="post">
-    <label>Single Article url: 
-      <input type="text" name="url" placeholder="http://matt.might.net/articles/hacking-strength/" <%= possilbe_url_value %> />
     </label><br/>
     <label>Kindle Email: 
       <input type="text" name="email" placeholder="brucewayne@free.kindle.com" />
