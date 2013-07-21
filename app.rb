@@ -45,7 +45,9 @@ helpers do
   end
 
   def possilbe_content_value
-    if content = params['content']
+    if @content
+      @content
+    elsif content = params['content']
       content
     else
       ''
@@ -53,7 +55,7 @@ helpers do
   end
 
   def load_image_option_value
-    ((ENV['RACK_ENV']=='production' && params['load_images']=='true') || ENV['RACK_ENV']!='production')
+    ((ENV['RACK_ENV']=='production' && params['load_images']=='true') || ENV['RACK_ENV']!='production') && !params['preview']
   end
 
 end
@@ -80,11 +82,20 @@ get_or_post '/kindleizecontent' do
   content  = params['content']
   title    = content.split("\n").first
   to_email = user_email
+  puts params.inspect
 
-  BookDelivery.email_to_kindle(title, content, to_email)
-  success_response('Your content is being emailed to your kindle shortly.')
+  if params['submit']
+    BookDelivery.email_to_kindle(title, content, to_email)
+    success_response('Your content is being emailed to your kindle shortly.')
+  else
+    @content = content
+    @preview = content
+    @usage = UsageCount.usage_remaining
+    erb :index
+  end
 end
 
+#TODO this all needs some serious refactoring
 get_or_post '/kindleize' do
   verify_url_and_email
   verify_usage
@@ -99,14 +110,21 @@ get_or_post '/kindleize' do
       to_email = user_email
 
       puts "current env #{ENV['RACK_ENV']} content match #{content.match(/img.*src/)} image option #{load_image_option_value}"
-      if ENV['RACK_ENV']=='production' && content.match(/img.*src/) && !load_image_option_value
-        puts "delivering #{title} via deferred server"
-        BookDelivery.deliver_via_deferred_server(request)
-        success_response('Your book is being generated and emailed to your kindle shortly.')
+      if params['submit']
+        if ENV['RACK_ENV']=='production' && content.match(/img.*src/) && !load_image_option_value
+          puts "delivering #{title} via deferred server"
+          BookDelivery.deliver_via_deferred_server(request)
+          success_response('Your book is being generated and emailed to your kindle shortly.')
+        else
+          puts "emailing #{title} to #{to_email} content #{content.length}"
+          BookDelivery.email_to_kindle(title, content, to_email)
+          success_response('Your book is being emailed to your kindle shortly.')
+        end
       else
-        puts "emailing #{title} to #{to_email} content #{content.length}"
-        BookDelivery.email_to_kindle(title, content, to_email)
-        success_response('Your book is being emailed to your kindle shortly.')
+        book = BookFormatter.new(title, content)
+        @preview = book.formatted_book
+        @usage = UsageCount.usage_remaining
+        erb :index
       end
     rescue => error
       puts "error during book building #{error.class}"
@@ -118,17 +136,29 @@ get_or_post '/kindleize' do
     content  = doc['content']
     title    = doc['title'] 
     to_email = user_email
-    
+
     BookDelivery.email_file_to_kindle(title, content, to_email)
+    if params['submit']
+      success_response('Your PDF document will be emailed to your kindle shortly.')
+    else
+      success_response("PDFs can't be previewed it will be emailed to your kindle shortly.")
+    end
   else
     doc      = document_fetcher.document_from_url
     content  = doc['content']
     title    = doc['title'] 
     to_email = user_email
     
-    BookDelivery.email_to_kindle(title, content, to_email)
+    if params['submit']
+      BookDelivery.email_to_kindle(title, content, to_email)
+      success_response('Your article will be emailed to your kindle shortly.')
+    else
+      book = BookFormatter.new(title, content)
+      @preview = book.formatted_book
+      @usage = UsageCount.usage_remaining
+      erb :index
+    end
   end
-  success_response('Your article will be emailed to your kindle shortly.')
 end
 
 private

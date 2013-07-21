@@ -75,13 +75,13 @@ class DocumentFetching
       content   += "#{seperator}#{post[:content]}<mbp:pagebreak />"
     end
 
-    book_start       = "<a name='start' /><h3>#{title}</h3>"
+   
     table_of_content = "<a name='TOC' /><h3>Table of Contents</h3><ul>"
     chapters.each_pair do |post_title, chapter|
       table_of_content += "<li><a href='##{chapter}'>#{post_title}</a></li>"
     end
     table_of_content += "</ul><hr/><mbp:pagebreak />"
-    content = "#{book_start}#{table_of_content}#{content}"
+    content = "#{table_of_content}#{content}"
 
     if(options['load_images'])
       content = filter_for_images(content)

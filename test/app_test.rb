@@ -25,7 +25,7 @@ class MyAppTest < Test::Unit::TestCase
   def test_kindleize
     DocumentFetching.any_instance.stubs(:document_from_url).returns({'content' => 'hey', 'title' => 'rock on'})
     BookDelivery.stubs(:email_to_kindle).returns(true)
-    get '/kindleize?url=http://batman.com&email=fake@kindle.com'
+    get '/kindleize?url=http://batman.com&email=fake@kindle.com&submit=true'
     assert_equal true, last_response.redirect?
     follow_redirect!
     assert_equal last_request.url, 'http://example.org/'

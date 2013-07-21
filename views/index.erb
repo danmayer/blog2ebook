@@ -3,47 +3,65 @@
   
   <p>
     Blog2Ebook is a tiny app that takes a blog (via RSS feed) and converts it to a Kindle Ebook. (it currently only supports the <i>Kindle</i> ebooks.)
-    <br/>
-    <br/>
-    Blog2Ebook supports importing from 3 different formats to make a <i>Kindle</i> book: 
-    <ul>
-      <li>RSS feed to Kindle</li>
-      <li>Single post to Kindle (useful because some https sites no longer allow bookmarklets)</li>
-      <li>Copied article text to Kindle</li>
-    </ul>
   </p>
 
-  <h5>
-    Before your kindle account will accept eBooks from this app make sure to follow the <a data-toggle="modal" data-target="#setupNotice">setup instructions</a>.
-  </h5>
+  <div class="row">
+    <div class="span5">
+      <h5>
+        Before your kindle account will accept eBooks from this app make sure to follow the <a data-toggle="modal" data-target="#setupNotice">setup instructions</a>.
+      </h5>
 
-  <hr/>
-  <p class='usage'>
-   This app relies on free resources, so currently it can only be used a limited number of times a day. There are <span><%= @usage %></span> uses remaining today.  
-  </p>
+      <hr/>
+      <p class='usage'>
+        This app relies on free resources, so currently it can only be used a limited number of times a day. There are <span><%= @usage %></span> uses remaining today.
+      </p>
 
-  <%= erb :setup_notice %>
+      <%= erb :setup_notice %>
 
-  <h3>Convert RSS feed (or single article URL) to Kindle Book</h3>
-  <form action="/kindleize" method="post">
-    <label>RSS feed url: 
-      <input type="text" name="url" placeholder="http://codeascraft.com/feed/" <%= possilbe_url_value %> />
-    </label><br/>
-    <label>Kindle Email: 
-      <input type="text" name="email" placeholder="brucewayne@free.kindle.com" />
-    </label><br/>
-    <input type="submit" name="submit" value="Kindleize It" class="button" />
-  </form>
+      <h3>Convert URL (RSS or Article)<br/> to Kindle Book</h3>
+      <form action="/kindleize" method="post">
+        <label>RSS feed url: 
+          <input type="text" name="url" placeholder="http://codeascraft.com/feed/" <%= possilbe_url_value %> />
+        </label>
+        <label>Kindle Email: 
+          <input type="text" name="email" placeholder="brucewayne@free.kindle.com" />
+        </label>
+        <input type="submit" name="submit" value="Kindleize It" class="button" />
+        <input type="submit" name="preview" value="Preview It" class="button" />
+      </form>
 
-  <h3>Directly Send Content</h3>
-  <form action="/kindleizecontent" method="post">
-    <label class='short'>Kindle Email: 
-      <input type="text" name="email" placeholder="brucewayne@free.kindle.com" />
-    </label>
-    <input type="submit" name="submit" value="Kindleize It" class="button stacked" />
-    <br/>
-    <label>Content: 
-      <textarea name="content" placeholder="pasted in content"><%= possilbe_content_value %></textarea>
-    </label><br/>
-  </form>
+      <h3>Content to Book</h3>
+      <form action="/kindleizecontent" method="post">
+        <input type="submit" name="submit" value="Kindleize It" class="button stacked" />
+        <input type="submit" name="preview" value="Preview It" class="button stacked" />
+        <label>Kindle Email: 
+          <input type="text" name="email" placeholder="brucewayne@free.kindle.com" />
+        </label>
+        <label>Content: 
+          <textarea name="content" placeholder="pasted in content"><%= possilbe_content_value %></textarea>
+        </label>
+      </form>
+    </div>
+    
+    <div class="span7">
+      <div class="kindle-book">
+        <div class="content">
+          <% if @preview!=nil %>
+            <p><%= @preview %></p>
+          <% else %>
+            <h2>Kindle Ebook Content Preview</h2>
+            <p>
+              Blog2Ebook supports importing from 3 different formats to make a <i>Kindle</i> book: 
+              <ul>
+                <li>RSS feed to Kindle</li>
+                <li>Single post to Kindle (useful because some https sites no longer allow bookmarklets)</li>
+                <li>Copied article text to Kindle</li>
+              </ul>
+            </p>
+          <% end %>
+        </div>
+      </div>
+    </div>
+
+  </div>
 </div>

@@ -19,7 +19,7 @@ class BookFormatterTest < Test::Unit::TestCase
 
   def test_formatted_book
     formatted_book = BookFormatter.new("title", "content")
-    assert_equal "<html><head><title>title</title></head><body>content</body></html>", formatted_book.formatted_book
+    assert_equal "<html><head><title>title</title></head><body><a name='start' /><h3>title</h3>content</body></html>", formatted_book.formatted_book
   end
 
   def test_formatted_book__with_replaced_content
@@ -28,7 +28,7 @@ content ’ “  
 EOS
 
     formatted_book = BookFormatter.new("title", bad_formatted_content)
-    assert_equal "<html><head><title>title</title></head><body>content ' \"  \n</body></html>", formatted_book.formatted_book
+    assert_equal "<html><head><title>title</title></head><body><a name='start' /><h3>title</h3>content ' \"  \n</body></html>", formatted_book.formatted_book
   end
 
 end

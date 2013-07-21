@@ -1,5 +1,7 @@
 body {
   padding-top: 50px;
+  background-color:black;
+  color: #EEEEEE;
 }
 
 input[type="text"] {
@@ -17,7 +19,6 @@ label.short {
 
 input.stacked {
     margin-bottom: 8px;
-    margin-left: 12px;
 }
 
 textarea {
@@ -40,16 +41,6 @@ textarea {
   color: #C00000;
 }
 
-footer{
-    background-color: #eee;
-    padding-left: 20px;	
-    padding-top: 12px;
-    bottom: -50px;
-    height: 50px;
-    left: 0;
-    right: 0;
-}
-
 .usage {
     font-size: 16px;
 }
@@ -57,4 +48,51 @@ footer{
 .usage span {
     color: red;
     font-weight: bold;
+}
+
+.kindle-book {
+  padding:0px;
+  margin:0px 0px; 
+  text-align:center;
+  background: url('/images/kindle.jpg');
+  background-repeat:no-repeat;
+  background-position:center top;
+  background-color:black;
+  height: 840px;
+  color: #333333;
+}
+
+.kindle-book .content {
+    height: 470px;
+    width:350px;
+    overflow-y: scroll;
+    overflow-x: hidden;
+    margin:0px auto;
+    text-align:left;
+    padding:10px;
+    padding-right:0px;
+    margin-left: 90px;
+    margin-top:134px;
+    background-color:#F6F6F6;
+    position: absolute;
+}
+
+.kindle-book .content img {
+    max-width:350px;
+}
+
+.kindle-book .content a {
+    color: #333;
+}
+
+
+footer{
+    color: #222222;
+    background-color: #eee;
+    padding-left: 20px;	
+    padding-top: 12px;
+    bottom: -50px;
+    height: 50px;
+    left: 0;
+    right: 0;
 }

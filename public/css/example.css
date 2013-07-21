@@ -23,7 +23,7 @@ body {
 }
 
 .content img {
-    width:350px;
+    max-width:350px;
 }
 
 .content a {

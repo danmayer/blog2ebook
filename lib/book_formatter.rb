@@ -17,7 +17,8 @@ class BookFormatter
   end
 
   def formatted_book
-    "<html><head><title>#{title}</title></head><body>#{fixed_encoding_content}</body></html>"
+    book_start       = "<a name='start' /><h3>#{title}</h3>"
+    "<html><head><title>#{title}</title></head><body>#{book_start}#{fixed_encoding_content}</body></html>"
   end
 
   private
