@@ -219,7 +219,7 @@ def verify_url_and_email
       end
     end
   end
-  verify_email
+  verify_email if params['submit']
 end
 
 def verify_content_and_email
@@ -234,7 +234,7 @@ def verify_content_and_email
       end
     end
   end
-  verify_email
+  verify_email if params['submit']
 end
 
 def verify_email
