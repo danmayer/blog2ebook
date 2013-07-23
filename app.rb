@@ -208,7 +208,7 @@ def success_response(notice)
 end
 
 def verify_url_and_email
-  unless params['url'].to_s.length > 1 && user_email.to_s.length > 1
+  if params['url'].to_s.length < 1 || (user_email.to_s.length < 1 && params['submit'])
     request.accept.each do |type|
       case type
       when 'text/json'
