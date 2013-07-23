@@ -223,7 +223,7 @@ def verify_url_and_email
 end
 
 def verify_content_and_email
-  unless params['content'].to_s.length > 1 && user_email.to_s.length > 1
+  if params['content'].to_s.length < 1 || (user_email.to_s.length < 1 && params['submit'])
     request.accept.each do |type|
       case type
       when 'text/json'
