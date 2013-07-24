@@ -70,7 +70,7 @@ class BookDelivery
                     :project => 'danmayer/blog2ebook',
                     :project_request => request_endpoint)
     rescue RestClient::RequestTimeout
-      raise "Sorry, accessing book generator failed, please try again... As it might be waking up from sleeping."
+      puts "Sorry, accessing book generator failed, please try again... As it might be waking up from sleeping... request likely OK fire and forget and all"
     end
   end
 
