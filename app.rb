@@ -105,23 +105,23 @@ get_or_post '/kindleize' do
   document_fetcher = DocumentFetching.new(params['url'])
 
   if params['url'].match(/\.git/)
-    location = document_fetcher.document_from_git
-    book     = GitBookFormatter.new(location, params['url'])
-    title    = book.formatted_title
-    to_email = user_email
+    if params['submit'] && ENV['RACK_ENV']=='production' && !params['load_images']
+      puts "delivering #{title} via deferred server"
+      BookDelivery.deliver_via_deferred_server(request)
+      success_response('Your book is being generated and emailed to your kindle shortly.')
+    else
+      location = document_fetcher.document_from_git
+      book     = GitBookFormatter.new(location, params['url'])
+      title    = book.formatted_title
+      to_email = user_email
     
-    if params['submit']
-      if ENV['RACK_ENV']=='production' && !params['load_images']
-        puts "delivering #{title} via deferred server"
-        BookDelivery.deliver_via_deferred_server(request)
-        success_response('Your book is being generated and emailed to your kindle shortly.')
-      else
+      if params['submit']
         file  = book.book_mobi_file_path
         BookDelivery.email_file_to_kindle(title, file, to_email)
         success_response('Your book is being emailed to your kindle shortly.')
+      else
+        render_book_preview(book)
       end
-    else
-      render_book_preview(book)
     end
   elsif params['url'].match(/\.rss/) || params['url'].match(/\.atom/) || params['url'].match(/\.xml/) || document_fetcher.rss_content?
     begin
