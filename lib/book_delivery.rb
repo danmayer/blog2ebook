@@ -63,8 +63,8 @@ class BookDelivery
       request_endpoint = "#{request.path}?#{uri.query}"
       
       resource = RestClient::Resource.new(DEFERRED_SERVER_ENDPOINT, 
-                                          :timeout => 14, 
-                                          :open_timeout => 8)
+                                          :timeout => 18, 
+                                          :open_timeout => 10)
       
       resource.post(:signature => BLOG_TO_BOOK_TOKEN,
                     :project => 'danmayer/blog2ebook',
