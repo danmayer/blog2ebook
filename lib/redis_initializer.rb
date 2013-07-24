@@ -1,3 +1,4 @@
+# encoding: utf-8
 require 'date'
 
 REDIS = if ENV['RACK_ENV']=='production'

@@ -1,3 +1,4 @@
+# encoding: utf-8
 class BookDelivery
   DEFERRED_SERVER_ENDPOINT = "http://git-hook-responder.herokuapp.com/deferred_project_command"
   BLOG_TO_BOOK_TOKEN = ENV['BLOG_2_BOOK_TOKEN']

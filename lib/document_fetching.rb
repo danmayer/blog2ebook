@@ -1,3 +1,4 @@
+# encoding: utf-8
 # Currently disabled gems use for testing improved single article porting
 #require 'pismo'
 #require 'readability'
