@@ -2,7 +2,7 @@ class BookDelivery
   DEFERRED_SERVER_ENDPOINT = "http://git-hook-responder.herokuapp.com/deferred_project_command"
   BLOG_TO_BOOK_TOKEN = ENV['BLOG_2_BOOK_TOKEN']
 
-  def self.email_file_to_kindle(title, file_content, to_email)
+  def self.email_filecontent_to_kindle(title, file_content, to_email)
     # TODO (update template project as well) heroku needs tmp have sinatra template always include the directory but ignore all files
     `mkdir -p #{settings.root}/tmp`
 
@@ -11,7 +11,11 @@ class BookDelivery
     `mkdir -p #{settings.root}/tmp/#{title.gsub(/( |\.)/,'_')}`
 
     File.open(book_file, 'w') {|f| f.write(file_content) }
-    
+
+    email_file_to_kindle(title, book_file, to_email)      
+  end
+
+  def self.email_file_to_kindle(title, book_file, to_email)    
     UsageCount.increase
 
     RestClient.post MAIL_API_URL+"/messages",

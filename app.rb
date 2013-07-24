@@ -16,6 +16,7 @@ require 'email_veracity'
 require 'redis'
 require 'addressable/uri'
 require './lib/book_formatter'
+require './lib/git_book_formatter'
 require './lib/document_fetching'
 require './lib/book_delivery'
 require './lib/redis_initializer'
@@ -66,6 +67,10 @@ before /.*/ do
   end
 end
 
+get "/tmp_images/:file" do |file|
+  send_file File.join("./tmp/git_book/images/", file)
+end
+
 def self.get_or_post(url,&block)
   get(url,&block)
   post(url,&block)
@@ -89,9 +94,7 @@ get_or_post '/kindleizecontent' do
     success_response('Your content is being emailed to your kindle shortly.')
   else
     @content = content
-    @preview = content
-    @usage = UsageCount.usage_remaining
-    erb :index
+    render_preview(title,content)
   end
 end
 
@@ -101,7 +104,20 @@ get_or_post '/kindleize' do
   verify_usage
   document_fetcher = DocumentFetching.new(params['url'])
 
-  if params['url'].match(/\.rss/) || params['url'].match(/\.atom/) || params['url'].match(/\.xml/) || document_fetcher.rss_content?
+  if params['url'].match(/\.git/)
+    location = document_fetcher.document_from_git
+    book     = GitBookFormatter.new(location, params['url'])
+    title    = book.formatted_title
+    to_email = user_email
+    
+    if params['submit']
+      file  = book.book_mobi_file_path
+      BookDelivery.email_file_to_kindle(title, file, to_email)
+      success_response('Your book is being emailed to your kindle shortly.')
+    else
+      render_book_preview(book)
+    end
+  elsif params['url'].match(/\.rss/) || params['url'].match(/\.atom/) || params['url'].match(/\.xml/) || document_fetcher.rss_content?
     begin
       options = {'load_images' => load_image_option_value}
       doc      = document_fetcher.document_from_feed(options)
@@ -121,10 +137,7 @@ get_or_post '/kindleize' do
           success_response('Your book is being emailed to your kindle shortly.')
         end
       else
-        book = BookFormatter.new(title, content)
-        @preview = book.formatted_book
-        @usage = UsageCount.usage_remaining
-        erb :index
+        render_preview(title,content)
       end
     rescue => error
       puts "error during book building #{error.class}"
@@ -137,7 +150,7 @@ get_or_post '/kindleize' do
     title    = doc['title'] 
     to_email = user_email
 
-    BookDelivery.email_file_to_kindle(title, content, to_email)
+    BookDelivery.email_filecontent_to_kindle(title, content, to_email)
     if params['submit']
       success_response('Your PDF document will be emailed to your kindle shortly.')
     else
@@ -153,15 +166,23 @@ get_or_post '/kindleize' do
       BookDelivery.email_to_kindle(title, content, to_email)
       success_response('Your article will be emailed to your kindle shortly.')
     else
-      book = BookFormatter.new(title, content)
-      @preview = book.formatted_book
-      @usage = UsageCount.usage_remaining
-      erb :index
+      render_preview(title,content)
     end
   end
 end
 
 private
+
+def render_book_preview(book)
+  @preview = book.formatted_book
+  @usage = UsageCount.usage_remaining
+  erb :index
+end
+
+def render_preview(title,content)
+  book = BookFormatter.new(title, content)
+  render_book_preview(book)
+end
 
 def user_email
   params['email'] || request.cookies["kindle_mail"]

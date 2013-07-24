@@ -15,11 +15,12 @@ class DocumentFetching
 
   # Pismo
   # doc = Pismo::Document.new(params['url'])
-  # {:content => doc.html_body}.to_json
+  # {:content => doc.html_body, :title => doc.title}.to_json
 
   #ruby-readability
   #source = open('http://mayerdan.com/2013/05/08/performance_bugs_cluster/')
-  # {:content => Readability::Document.new(source).content}
+  #doc = Readability::Document.new(source)
+  # {:content => doc.content}
 
   ###
   # Above examples are using other parsers
@@ -34,6 +35,12 @@ class DocumentFetching
     rescue RestClient::GatewayTimeout
       error_response("Hmmm looks like I can't reach that article.")
     end
+  end
+
+  def document_from_git
+    `rm -rf ./tmp/git_book/`
+    `git clone #{@url} ./tmp/git_book`
+    "./tmp/git_book"
   end
 
   def file_from_url
