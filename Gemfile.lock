@@ -1,3 +1,9 @@
+GIT
+  remote: git://github.com/halo/leader.git
+  revision: e370bb585b2a8f4f7f31ba7f284b529d9b7f5199
+  specs:
+    leader (0.0.1)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -46,6 +52,7 @@ DEPENDENCIES
   email_veracity
   foreman
   json
+  leader!
   mocha
   nokogiri
   pry

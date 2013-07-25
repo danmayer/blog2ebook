@@ -8,6 +8,7 @@ gem 'rack-flash3'
 gem 'email_veracity'
 gem 'redis'
 gem 'addressable'
+gem 'leader', :git => 'git://github.com/halo/leader.git'
 
 #enable https
 #gem 'rack-ssl-enforcer'
