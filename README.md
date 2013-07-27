@@ -71,6 +71,8 @@ This project runs [travis-ci.org](http://travis-ci.org)
 ## TODO
 
   * one input for any URL then detect if it is a single article or a feed. You can then provide the best option / conversion by default.
+  * this crashes it 'http://37signals.com/svn/posts/3535-beyond-the-default-rails-environments'
+  * add exception monitoring
   * 'http://codeascraft.com/feed/' doesn't include full article text, possibly gather some from feed them hit article URL for full article content 
   * Add ability to preview 
   * Support converting github repos to kindle formatted books

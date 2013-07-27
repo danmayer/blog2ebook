@@ -20,8 +20,9 @@ gem 'leader', :git => 'git://github.com/halo/leader.git'
 # Prevent installation on Heroku with
 # heroku config:add BUNDLE_WITHOUT="development:test"
 group :development, :test do
-   gem 'rack-test'
-   gem 'mocha'
-   gem 'pry'
-   gem 'foreman'
+  gem 'shotgun'
+  gem 'rack-test'
+  gem 'mocha'
+  gem 'pry'
+  gem 'foreman'
 end
