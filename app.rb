@@ -169,8 +169,14 @@ get_or_post '/kindleize' do
     to_email = user_email
     
     if params['submit']
-      BookDelivery.email_to_kindle(title, content, to_email)
-      success_response('Your article will be emailed to your kindle shortly.')
+      if ENV['RACK_ENV']=='production' && content.match(/img.*src/) && !load_image_option_value
+        puts "delivering #{title} via deferred server"
+        BookDelivery.deliver_via_deferred_server(request)
+        success_response('Your book is being generated and emailed to your kindle shortly.')
+      else
+        BookDelivery.email_to_kindle(title, content, to_email)
+        success_response('Your article will be emailed to your kindle shortly.')
+      end
     else
       render_preview(title,content)
     end
