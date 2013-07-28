@@ -10,6 +10,7 @@ class BookDeliveryTest < Test::Unit::TestCase
   def setup
     REDIS.stubs(:incr).returns(1)
     REDIS.stubs(:get).returns(2)
+    settings = stub(:root => '')
   end
 
   def test_email_to_kindle
