@@ -34,6 +34,9 @@ textarea {
   background: #FFCCCC;
   padding: 8px;
   margin-bottom: 24px;
+}
+
+#setupNotice {
   color:#ccc;
 }
 
