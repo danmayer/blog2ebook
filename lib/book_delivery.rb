@@ -2,14 +2,18 @@
 class BookDelivery
   DEFERRED_SERVER_ENDPOINT = "http://git-hook-responder.herokuapp.com/deferred_project_command"
   BLOG_TO_BOOK_TOKEN = ENV['BLOG_2_BOOK_TOKEN']
+  
+  def self.root_path
+    defined? settings ? settings.root : File.expand_path(File.join(File.dirname(__FILE__), '../'))
+  end
 
   def self.email_filecontent_to_kindle(title, file_content, to_email)
     # TODO (update template project as well) heroku needs tmp have sinatra template always include the directory but ignore all files
-    `mkdir -p #{settings.root}/tmp`
+    `mkdir -p #{root_path}/tmp`
 
     book = BookFormatter.new(title, file_content)
-    book_file = book.book_file_name(settings.root).gsub(/\.html/,'.pdf')
-    `mkdir -p #{settings.root}/tmp/#{title.gsub(/( |\.)/,'_')}`
+    book_file = book.book_file_name(root_path).gsub(/\.html/,'.pdf')
+    `mkdir -p #{root_path}/tmp/#{title.gsub(/( |\.)/,'_')}`
 
     File.open(book_file, 'w') {|f| f.write(file_content) }
 
@@ -29,11 +33,11 @@ class BookDelivery
 
   def self.email_to_kindle(title, content, to_email)
     # TODO (update template project as well) heroku needs tmp have sinatra template always include the directory but ignore all files
-    `mkdir -p #{settings.root}/tmp`
+    `mkdir -p #{root_path}/tmp`
 
     book = BookFormatter.new(title, content)
-    book_file = book.book_file_name(settings.root)
-    `mkdir -p #{settings.root}/tmp/#{title.gsub(/( |\.)/,'_')}`
+    book_file = book.book_file_name(root_path)
+    `mkdir -p #{root_path}/tmp/#{title.gsub(/( |\.)/,'_')}`
 
     File.open(book_file, 'w', encoding: 'ISO-8859-1') {|f| f.write(book.formatted_book) }
     delivery_file = book_file
