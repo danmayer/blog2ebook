@@ -67,6 +67,7 @@ This project runs [travis-ci.org](http://travis-ci.org)
 * [leanpub](https://leanpub.com/)
 * [blog2book pothi app](http://blog2book.pothi.com/app/)
 * [ruby bookshop](https://github.com/blueheadpublishing/bookshop)
+* [EBookGlue](https://ebookglue.com/)
 
 ## TODO
 
