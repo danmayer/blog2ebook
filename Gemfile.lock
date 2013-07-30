@@ -20,6 +20,7 @@ GEM
     mime-types (1.23)
     mocha (0.13.1)
       metaclass (~> 0.0.1)
+    newrelic_rpm (3.6.6.147)
     nokogiri (1.5.9)
     pry (0.9.12.2)
       coderay (~> 1.0.5)
@@ -56,6 +57,7 @@ DEPENDENCIES
   json
   leader!
   mocha
+  newrelic_rpm
   nokogiri
   pry
   rack-flash3

@@ -10,6 +10,7 @@ module OpenSSL
   end
 end
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+require 'newrelic_rpm'
 require 'nokogiri'
 require 'rack-flash'
 require 'email_veracity'
