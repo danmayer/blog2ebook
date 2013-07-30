@@ -12,8 +12,12 @@ class BookFormatter
     title.gsub('.',' ').gsub(/'/,'')
   end
 
+  def book_folder_name(root)
+    "#{root}/tmp/#{title.gsub(/( |\.|')/,'_')}"
+  end
+
   def book_file_name(root)
-    "#{root}/tmp/#{title.gsub(/( |\.|')/,'_')}/#{formatted_title}.html"
+    "#{book_folder_name(root)}/#{formatted_title}.html"
   end
 
   def formatted_book

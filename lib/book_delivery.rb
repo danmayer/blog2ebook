@@ -8,9 +8,6 @@ class BookDelivery
   end
 
   def self.email_filecontent_to_kindle(title, file_content, to_email)
-    # TODO (update template project as well) heroku needs tmp have sinatra template always include the directory but ignore all files
-    `mkdir -p #{root_path}/tmp`
-
     book = BookFormatter.new(title, file_content)
     book_file = book.book_file_name(root_path).gsub(/\.html/,'.pdf')
     `mkdir -p #{root_path}/tmp/#{title.gsub(/( |\.)/,'_')}`
@@ -32,12 +29,9 @@ class BookDelivery
   end
 
   def self.email_to_kindle(title, content, to_email)
-    # TODO (update template project as well) heroku needs tmp have sinatra template always include the directory but ignore all files
-    `mkdir -p #{root_path}/tmp`
-
     book = BookFormatter.new(title, content)
     book_file = book.book_file_name(root_path)
-    `mkdir -p #{root_path}/tmp/#{title.gsub(/( |\.)/,'_')}`
+    `mkdir -p #{book.book_folder_name(root_path)}`
 
     File.open(book_file, 'w', encoding: 'ISO-8859-1') {|f| f.write(book.formatted_book) }
     delivery_file = book_file
