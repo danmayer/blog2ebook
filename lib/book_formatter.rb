@@ -9,7 +9,7 @@ class BookFormatter
   end
 
   def formatted_title
-    title.gsub('.',' ')
+    title.gsub('.',' ').gsub(/'/,'')
   end
 
   def book_file_name(root)

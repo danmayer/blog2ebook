@@ -4,7 +4,7 @@ class BookDelivery
   BLOG_TO_BOOK_TOKEN = ENV['BLOG_2_BOOK_TOKEN']
   
   def self.root_path
-    defined? settings ? settings.root : File.expand_path(File.join(File.dirname(__FILE__), '../'))
+    defined?(settings) ? settings.root : File.expand_path(File.join(File.dirname(__FILE__), '../'))
   end
 
   def self.email_filecontent_to_kindle(title, file_content, to_email)
