@@ -8,7 +8,6 @@ gem 'rack-flash3'
 gem 'email_veracity'
 gem 'redis'
 gem 'addressable'
-gem 'leader', :git => 'git://github.com/halo/leader.git'
 gem 'newrelic_rpm'
 
 #enable https
@@ -25,5 +24,6 @@ group :development, :test do
   gem 'rack-test'
   gem 'mocha'
   gem 'pry'
+  gem 'leader', :git => 'git://github.com/halo/leader.git'
   gem 'foreman'
 end
