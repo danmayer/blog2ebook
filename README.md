@@ -6,7 +6,9 @@ This is a simple project that started because I was going on a trip and wanted t
 * Currently supports only Kindle
   * RSS feed to kindle
   * Single post to kindle (useful because some https sites no longer allow bookmarklets to work)
+  * PDF files, given PDF url it will email it to your kindle
   * Copied Text to kindle 
+  * git repos specifically formatted to be converted to a ebook
 
 To see a a brief overview of the project see my post [Introducing Blog2Ebook](http://mayerdan.com/ruby/2013/06/20/introducing-blog2ebook/)
 
@@ -71,16 +73,12 @@ This project runs [travis-ci.org](http://travis-ci.org)
 
 ## TODO
 
-  * one input for any URL then detect if it is a single article or a feed. You can then provide the best option / conversion by default.
   * this crashes it 'http://37signals.com/svn/posts/3535-beyond-the-default-rails-environments'
   * add exception monitoring
   * 'http://codeascraft.com/feed/' doesn't include full article text, possibly gather some from feed them hit article URL for full article content 
-  * Add ability to preview 
-  * Support converting github repos to kindle formatted books
   * Crashes on single article 'http://www.washingtonpost.com/blogs/wonkblog/wp/2013/06/10/going-to-college-is-worth-it-even-if-you-drop-out/'
   * Stripe purchase integration
   * Support multiple book formats possibly using Calibre for converting
-  * improve default styles around the example formatted page it gives a bad impression.
   * Support file upload to package up and publish book to amazon, or at least allow authors to preview on kindle. This would be work to support / Steve / Erin guides.
   
 ## Contributing
