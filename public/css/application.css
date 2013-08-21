@@ -62,7 +62,7 @@ textarea {
   background-repeat:no-repeat;
   background-position:center top;
   background-color:black;
-  height: 840px;
+  height: 684px;
   color: #333333;
 }
 
@@ -75,8 +75,8 @@ textarea {
     text-align:left;
     padding:10px;
     padding-right:0px;
-    margin-left: 90px;
-    margin-top:134px;
+    margin-left: 95px;
+    margin-top:84px;
     background-color:#F6F6F6;
     position: absolute;
 }

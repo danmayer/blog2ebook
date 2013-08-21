@@ -135,7 +135,7 @@ class DocumentFetching
       open(filename, 'wb') do |file|
         begin
           file << open(image_url).read
-        rescue Errno::ECONNRESET, Errno::ENOENT, SocketError
+        rescue Errno::ECONNRESET, Errno::ENOENT, SocketError, OpenURI::HTTPError
           puts "skipping #{image_url}"
         end
       end
