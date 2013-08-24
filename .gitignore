@@ -4,4 +4,6 @@ log/sinatra.log
 artifacts/*
 log/*
 .yardoc/
+dump.rdb
+!.gitkeep
 !.gitignore

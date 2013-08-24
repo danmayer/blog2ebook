@@ -12,7 +12,7 @@ end
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 require 'newrelic_rpm'
 require 'nokogiri'
-require 'rack-flash'
+require 'sinatra/flash'
 require 'email_veracity'
 require 'redis'
 require 'addressable/uri'
@@ -34,7 +34,15 @@ use Rack::Session::Cookie, :key => 'kindleizer.rack.session',
 :expire_after => 2592000, # In seconds
 :secret => "update_secret_#{ENV['MAILGUN_API_KEY']}"
 
-use Rack::Flash, :sweep => true
+configure :development do
+  require "better_errors"
+  use BetterErrors::Middleware
+  BetterErrors.application_root = File.dirname(__FILE__)
+end
+
+configure :production do
+  require 'newrelic_rpm'
+end
 
 helpers do
 

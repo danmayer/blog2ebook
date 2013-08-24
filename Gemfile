@@ -4,11 +4,10 @@ gem 'sinatra'
 gem 'json'
 gem 'rest-client'
 gem 'nokogiri'
-gem 'rack-flash3'
+gem 'sinatra-flash'
 gem 'email_veracity'
 gem 'redis'
 gem 'addressable'
-gem 'newrelic_rpm'
 
 #enable https
 #gem 'rack-ssl-enforcer'
@@ -17,8 +16,11 @@ gem 'newrelic_rpm'
 # gem 'pismo'
 # gem "ruby-readability", :require => 'readability'
 
-# Prevent installation on Heroku with
-# heroku config:add BUNDLE_WITHOUT="development:test"
+group :production do
+  gem 'unicorn'
+  gem 'newrelic_rpm'
+end
+
 group :development, :test do
   gem 'shotgun'
   gem 'rack-test'
