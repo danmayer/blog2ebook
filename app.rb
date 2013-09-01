@@ -19,6 +19,7 @@ require 'redis'
 require 'addressable/uri'
 require 'airbrake'
 
+require './lib/rack_catcher'
 require './lib/book_formatter'
 require './lib/git_book_formatter'
 require './lib/document_fetching'
