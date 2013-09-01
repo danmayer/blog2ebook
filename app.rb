@@ -89,6 +89,10 @@ before /.*/ do
   end
 end
 
+get '/test_exception' do
+  raise "error test"
+end
+
 get "/tmp_images/:file" do |file|
   send_file File.join("./tmp/git_book/images/", file)
 end
