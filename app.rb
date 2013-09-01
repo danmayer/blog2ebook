@@ -184,22 +184,26 @@ get_or_post '/kindleize' do
       success_response("PDFs can't be previewed it will be emailed to your kindle shortly.")
     end
   else
-    doc      = document_fetcher.document_from_url
-    content  = doc['content']
-    title    = doc['title'] 
-    to_email = user_email
-    
-    if params['submit']
-      if ENV['RACK_ENV']=='production' && content.match(/img.*src/) && !load_image_option_value
-        puts "delivering #{title} via deferred server"
-        BookDelivery.deliver_via_deferred_server(request)
-        success_response('Your book is being generated and emailed to your kindle shortly.')
+    begin
+      doc      = document_fetcher.document_from_url
+      content  = doc['content']
+      title    = doc['title'] 
+      to_email = user_email
+      
+      if params['submit']
+        if ENV['RACK_ENV']=='production' && content.match(/img.*src/) && !load_image_option_value
+          puts "delivering #{title} via deferred server"
+          BookDelivery.deliver_via_deferred_server(request)
+          success_response('Your book is being generated and emailed to your kindle shortly.')
+        else
+          BookDelivery.email_to_kindle(title, content, to_email)
+          success_response('Your article will be emailed to your kindle shortly.')
+        end
       else
-        BookDelivery.email_to_kindle(title, content, to_email)
-        success_response('Your article will be emailed to your kindle shortly.')
+        render_preview(title,content)
       end
-    else
-      render_preview(title,content)
+    rescue RestClient::GatewayTimeout
+      error_response("Hmmm looks like I can't reach that article.")
     end
   end
 end

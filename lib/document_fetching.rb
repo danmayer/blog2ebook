@@ -29,13 +29,9 @@ class DocumentFetching
   # this isn't really the best support, clearly more focused on RSS feeds
   ###
   def document_from_url
-    begin
-      results = RestClient::Request.execute(:method => :get, :url => "http://www.readability.com/api/content/v1/parser?url=#{@url}&token=#{READ_API_TOKEN}", :timeout => 10, :open_timeout => 10)
-      json_results = JSON.parse(results)
-      json_results
-    rescue RestClient::GatewayTimeout
-      error_response("Hmmm looks like I can't reach that article.")
-    end
+    results = RestClient::Request.execute(:method => :get, :url => "http://www.readability.com/api/content/v1/parser?url=#{@url}&token=#{READ_API_TOKEN}", :timeout => 10, :open_timeout => 10)
+    json_results = JSON.parse(results)
+    json_results
   end
 
   def document_from_git
