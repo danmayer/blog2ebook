@@ -66,10 +66,11 @@ This project runs [travis-ci.org](http://travis-ci.org)
 * [blurb](http://www.blurb.com/)
 * [blog2book](http://blog2print.sharedbook.com/blogworld/printmyblog/index.html)
 * [anthologize](http://anthologize.org/)
-* [leanpub](https://leanpub.com/)
+* [leanpub](https://leanpub.com/) offers easy [self publishing](https://leanpub.com/authors) 
 * [blog2book pothi app](http://blog2book.pothi.com/app/)
 * [ruby bookshop](https://github.com/blueheadpublishing/bookshop)
 * [EBookGlue](https://ebookglue.com/)
+* [Graphically](http://graphicly.com/) great tool for self publishing image heavy books
 
 ## TODO
 

@@ -10,12 +10,15 @@ module OpenSSL
   end
 end
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+
 require 'newrelic_rpm'
 require 'nokogiri'
 require 'sinatra/flash'
 require 'email_veracity'
 require 'redis'
 require 'addressable/uri'
+require 'airbrake'
+
 require './lib/book_formatter'
 require './lib/git_book_formatter'
 require './lib/document_fetching'
@@ -42,6 +45,15 @@ end
 
 configure :production do
   require 'newrelic_rpm'
+  Airbrake.configure do |config|
+    config.api_key = ENV['B2B_ERRBIT_API_KEY']
+    config.host    = ENV['ERRBIT_HOST']
+    config.port    = 80
+    config.secure  = config.port == 443
+  end
+  use Rack::Catcher
+  use Airbrake::Rack
+  set :raise_errors, true
 end
 
 helpers do

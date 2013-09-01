@@ -8,9 +8,7 @@ gem 'sinatra-flash'
 gem 'email_veracity'
 gem 'redis'
 gem 'addressable'
-
-#enable https
-#gem 'rack-ssl-enforcer'
+gem 'airbrake'
 
 # disabled for now but used to test other single article rendering methods
 # gem 'pismo'
@@ -21,11 +19,16 @@ group :production do
   gem 'newrelic_rpm'
 end
 
-group :development, :test do
-  gem 'shotgun'
+group :test do
   gem 'rack-test'
   gem 'mocha'
+end
+
+group :development do
+  gem 'shotgun'
   gem 'pry'
   gem 'leader', :git => 'git://github.com/halo/leader.git'
   gem 'foreman'
+  gem "better_errors"
+  gem "binding_of_caller"
 end
