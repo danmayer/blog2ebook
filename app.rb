@@ -11,7 +11,6 @@ module OpenSSL
 end
 OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
 
-require 'newrelic_rpm'
 require 'nokogiri'
 require 'sinatra/flash'
 require 'email_veracity'
@@ -87,10 +86,6 @@ before /.*/ do
   if request.host.match(/herokuapp.com/)
     redirect request.url.gsub("herokuapp.com",'picoappz.com'), 301
   end
-end
-
-get '/test_exception' do
-  raise "error test"
 end
 
 get "/tmp_images/:file" do |file|
