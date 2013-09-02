@@ -60,6 +60,8 @@ This project runs [travis-ci.org](http://travis-ci.org)
 * [publish to amazon's platform](http://www.copyblogger.com/how-to-publish-kindle-ebook/)
 * [RSS feed parsing useful for converting](http://ramblinglabs.com/blog/2012/02/migrating-your-blog-posts-to-markdown-with-upmark-and-nokogiri)
 * [How to turn your blog into a book](http://en.blog.wordpress.com/2012/04/04/how-to-turn-your-blog-into-a-book/)
+* pandoc to epub `pandoc mybook.txt -o mybook.epub` from https://github.com/vienna-rb/slides/blob/master/13-06-06/markdown.md
+* lots of book conversion and writing examples from [progit open source git book](https://github.com/progit/progit)
 
 ## Other similar projects
 
