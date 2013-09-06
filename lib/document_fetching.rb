@@ -93,6 +93,8 @@ class DocumentFetching
     end
 
     {:title => title, :content => content}
+  rescue RestClient::GatewayTimeout, RestClient::ResourceNotFound
+    error_response("Hmmm looks like I can't reach that file.")
   end
 
   private

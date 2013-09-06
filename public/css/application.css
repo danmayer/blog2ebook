@@ -89,7 +89,6 @@ textarea {
     color: #333;
 }
 
-
 footer{
     color: #222222;
     background-color: #eee;
@@ -99,4 +98,8 @@ footer{
     height: 50px;
     left: 0;
     right: 0;
+}
+
+footer .container .right {
+    float:right;
 }

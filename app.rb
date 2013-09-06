@@ -25,6 +25,9 @@ require './lib/document_fetching'
 require './lib/book_delivery'
 require './lib/redis_initializer'
 
+Encoding.default_external = Encoding::UTF_8
+Encoding.default_internal = Encoding::UTF_8
+
 MAIL_API_KEY = ENV['MAILGUN_API_KEY']
 MAIL_API_URL = "https://api:#{MAIL_API_KEY}@api.mailgun.net/v2/app7941314.mailgun.org"
 
@@ -211,7 +214,7 @@ end
 private
 
 def render_book_preview(book)
-  @preview = book.formatted_book
+  @preview = book.formatted_book.force_encoding("UTF-8")
   @usage = UsageCount.usage_remaining
   erb :index
 end
