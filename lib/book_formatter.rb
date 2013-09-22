@@ -21,14 +21,22 @@ class BookFormatter
   end
 
   def formatted_book
-    book_start       = "<a name='start' /><h3>#{title}</h3>"
+    book_start       = "<a name='start' /><h3>#{fixed_encoding_title}</h3>"
     "<html><head><title>#{title}</title></head><body>#{book_start}#{fixed_encoding_content}</body></html>"
   end
 
   private
 
+  def fixed_encoding_title
+    fixed_encoding(content)
+  end
+
   def fixed_encoding_content
-    content.gsub(/(’|’)/,"'")
+    fixed_encoding(content)
+  end
+
+  def self.fixed_encoding(text)
+    text.gsub(/(’|’)/,"'")
       .gsub(/(“|”)/,'"')
       .gsub(/ /,' ')
       .gsub(/♥/,'<3')
