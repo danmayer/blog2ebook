@@ -28,11 +28,11 @@ class BookFormatter
   private
 
   def fixed_encoding_title
-    fixed_encoding(content)
+    BookFormatter.fixed_encoding(title)
   end
 
   def fixed_encoding_content
-    fixed_encoding(content)
+    BookFormatter.fixed_encoding(content)
   end
 
   def self.fixed_encoding(text)
