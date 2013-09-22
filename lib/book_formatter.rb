@@ -22,7 +22,7 @@ class BookFormatter
 
   def formatted_book
     book_start       = "<a name='start' /><h3>#{fixed_encoding_title}</h3>"
-    "<html><head><title>#{title}</title></head><body>#{book_start}#{fixed_encoding_content}</body></html>"
+    "<html><head><title>#{fixed_encoding_title}</title></head><body>#{book_start}#{fixed_encoding_content}</body></html>"
   end
 
   private
