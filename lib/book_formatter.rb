@@ -31,6 +31,7 @@ class BookFormatter
     content.gsub(/(’|’)/,"'")
       .gsub(/(“|”)/,'"')
       .gsub(/ /,' ')
+      .gsub(/♥/,'<3')
       .encode('ISO-8859-1', {:invalid => :replace, :undef => :replace, :replace => '?'})
   end
 
