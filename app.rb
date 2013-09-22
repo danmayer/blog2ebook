@@ -126,26 +126,32 @@ end
 get_or_post '/kindleize' do
   verify_url_and_email
   verify_usage
-  document_fetcher = DocumentFetching.new(params['url'])
+  document_fetcher = DocumentFetching.new(params['url']) unless params['url'].nil?
 
-  if params['url'].match(/\.git/)
-    if params['submit'] && ENV['RACK_ENV']=='production' && !params['load_images']
-      puts "delivering via deferred server"
-      BookDelivery.deliver_via_deferred_server(request)
-      success_response('Your book is being generated and emailed to your kindle shortly.')
-    else
-      location = document_fetcher.document_from_git
-      book     = GitBookFormatter.new(location, params['url'])
-      title    = book.formatted_title
-      to_email = user_email
-    
-      if params['submit']
-        file  = book.book_mobi_file_path
-        BookDelivery.email_file_to_kindle(title, file, to_email)
-        success_response('Your book is being emailed to your kindle shortly.')
+  if params['url'].nil?
+    error_response("You must provide the url param")
+  elsif params['url'].match(/\.git/)
+    begin
+      if params['submit'] && ENV['RACK_ENV']=='production' && !params['load_images']
+        puts "delivering via deferred server"
+        BookDelivery.deliver_via_deferred_server(request)
+        success_response('Your book is being generated and emailed to your kindle shortly.')
       else
-        render_book_preview(book)
+        location = document_fetcher.document_from_git
+        book     = GitBookFormatter.new(location, params['url'])
+        title    = book.formatted_title
+        to_email = user_email
+        
+        if params['submit']
+          file  = book.book_mobi_file_path
+          BookDelivery.email_file_to_kindle(title, file, to_email)
+          success_response('Your book is being emailed to your kindle shortly.')
+        else
+          render_book_preview(book)
+        end
       end
+    rescue RestClient::ResourceNotFound
+      error_response("Server request timed out, please try again.")
     end
   elsif params['url'].match(/\.rss/) || params['url'].match(/\.atom/) || params['url'].match(/\.xml/) || document_fetcher.rss_content?
     begin
@@ -205,6 +211,8 @@ get_or_post '/kindleize' do
       else
         render_preview(title,content)
       end
+    rescue RestClient::ResourceNotFound
+      error_response("Server request timed out, please try again.")
     rescue RestClient::GatewayTimeout
       error_response("Hmmm looks like I can't reach that article.")
     end
