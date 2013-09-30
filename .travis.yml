@@ -1,4 +1,11 @@
 language: ruby
 rvm:
-  - 1.9.3
-  - rbx-19mode
+- 1.9.3
+- rbx-19mode
+deploy:
+  provider: heroku
+  app: blog2ebook
+  api_key:
+    secure: AuwCizEKFLv+vk9EQdf7EaS4A/6hKH/NqeawtyL/SU3wFTez+WiGBH8rBTzeLfZMlvrls7iCguF4YrL7KiC36FFBZ/MSFtuS1+J7aS0NqxS4JioWp0Qna0JSuDW+MzCzQ1ucW9Y7abJrYLDTXaYKByTR/bdRVgGMztdRfnYAcag=
+  on:
+    rvm: 1.9.3

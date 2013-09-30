@@ -13,7 +13,8 @@ class BookFormatter
   end
 
   def book_folder_name(root)
-    "#{root}/tmp/#{title.gsub(/( |\.|')/,'_')}"
+    short_title    = title.length > 50 ? "#{title[0...50]}" : title
+    "#{root}/tmp/#{short_title.gsub(/( |\.|')/,'_')}"
   end
 
   def book_file_name(root)
