@@ -18,7 +18,8 @@ class BookFormatter
   end
 
   def book_file_name(root)
-    "#{book_folder_name(root)}/#{formatted_title}.html"
+    short_title    = formatted_title.length > 50 ? "#{formatted_title[0...50]}" : formatted_title
+    "#{book_folder_name(root)}/#{short_title}.html"
   end
 
   def formatted_book

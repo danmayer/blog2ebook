@@ -110,6 +110,7 @@ get_or_post '/kindleizecontent' do
   verify_usage
   content  = params['content']
   title    = content.split("\n").first
+  title    = "#{title[0...50]}" if title.length > 50
   to_email = user_email
   puts params.inspect
 
