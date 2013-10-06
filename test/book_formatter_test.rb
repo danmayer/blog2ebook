@@ -9,12 +9,12 @@ class BookFormatterTest < Test::Unit::TestCase
 
   def test_formatted_title
     formatted_book = BookFormatter.new("replace.periods", "content")
-    assert_equal "replace periods", formatted_book.formatted_title
+    assert_equal "replace_periods", formatted_book.formatted_title
   end
 
   def test_book_file_name
     formatted_book = BookFormatter.new("replace.periods", "content")
-    assert_equal "/root/tmp/replace_periods/replace periods.html", formatted_book.book_file_name('/root')
+    assert_match "tmp/replace_periods/replace_periods.html", formatted_book.book_file_name
   end
 
   def test_formatted_book

@@ -7,18 +7,7 @@ class BookDelivery
     defined?(settings) ? settings.root : File.expand_path(File.join(File.dirname(__FILE__), '../'))
   end
 
-  def self.email_filecontent_to_kindle(title, file_content, to_email, opts = {})
-    type = opts.fetch(:type){ 'pdf' }
-    book = BookFormatter.new(title, file_content)
-    book_file = book.book_file_name(root_path).gsub(/\.(html|epub)/,".#{type}")
-    `mkdir -p #{root_path}/tmp/#{title.gsub(/( |\.)/,'_')}`
-
-    File.open(book_file, 'w:binary') {|f| f.write(file_content) }
-
-    email_file_to_kindle(title, book_file, to_email)      
-  end
-
-  def self.email_file_to_kindle(title, book_file, to_email)    
+  def self.email_book_to_kindle(book, to_email)
     UsageCount.increase
 
     RestClient.post MAIL_API_URL+"/messages",
@@ -26,33 +15,7 @@ class BookDelivery
     :to => to_email,
     :subject => "kindle book",
     :text => 'kindle book attached',
-    :attachment => File.new(book_file)
-  end
-
-  def self.email_to_kindle(title, content, to_email)
-    book = BookFormatter.new(title, content)
-    book_file = book.book_file_name(root_path)
-    `mkdir -p #{book.book_folder_name(root_path)}`
-
-    File.open(book_file, 'w', encoding: 'ISO-8859-1') {|f| f.write(book.formatted_book) }
-    delivery_file = book_file
-
-    if ENV['RACK_ENV']=='production' && (content.match(/img.*src/) || book_file.match(/epub/) )
-      kindle_gen_cmd = "kindlegen -verbose \"#{book_file}\" -o \"#{book.formatted_title}.mobi\""
-      puts "cmd: #{kindle_gen_cmd}"
-      conversion_results = `#{kindle_gen_cmd}`
-      puts conversion_results
-      delivery_file = book_file.gsub(/\.(html|epub)/i,'.mobi')
-    end
-    
-    UsageCount.increase
-
-    RestClient.post MAIL_API_URL+"/messages",
-    :from => "kindleizer@mayerdan.com",
-    :to => to_email,
-    :subject => "kindle book",
-    :text => 'kindle book attached',
-    :attachment => File.new(delivery_file)
+    :attachment => File.new(book.delivery_file)
   end
 
   def self.deliver_via_deferred_server(request)

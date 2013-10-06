@@ -110,12 +110,12 @@ get_or_post '/kindleizecontent' do
   verify_usage
   content  = params['content']
   title    = content.split("\n").first
-  title    = "#{title[0...50]}" if title.length > 50
   to_email = user_email
   puts params.inspect
 
   if params['submit']
-    BookDelivery.email_to_kindle(title, content, to_email)
+    book = BookFormatter.new(title, content)
+    BookDelivery.email_book_to_kindle(book, to_email)
     success_response('Your content is being emailed to your kindle shortly.')
   else
     @content = content
@@ -140,12 +140,10 @@ get_or_post '/kindleize' do
       else
         location = document_fetcher.document_from_git
         book     = GitBookFormatter.new(location, params['url'])
-        title    = book.formatted_title
         to_email = user_email
         
         if params['submit']
-          file  = book.book_mobi_file_path
-          BookDelivery.email_file_to_kindle(title, file, to_email)
+          BookDelivery.email_book_to_kindle(book, to_email)
           success_response('Your book is being emailed to your kindle shortly.')
         else
           render_book_preview(book)
@@ -170,7 +168,8 @@ get_or_post '/kindleize' do
           success_response('Your book is being generated and emailed to your kindle shortly.')
         else
           puts "emailing #{title} to #{to_email} content #{content.length}"
-          BookDelivery.email_to_kindle(title, content, to_email)
+          book = BookFormatter.new(title, content)
+          BookDelivery.email_book_to_kindle(book, to_email)
           success_response('Your book is being emailed to your kindle shortly.')
         end
       else
@@ -193,7 +192,8 @@ get_or_post '/kindleize' do
       BookDelivery.deliver_via_deferred_server(request)
       success_response('Your book is being generated and emailed to your kindle shortly.')
     else
-      BookDelivery.email_filecontent_to_kindle(title, content, to_email, :type => type)
+      book = BookFormatter.new(title, content, type)
+      BookDelivery.email_book_to_kindle(book, to_email)
     end
     if params['submit']
       success_response("Your #{type} document will be emailed to your kindle shortly.")
@@ -213,7 +213,8 @@ get_or_post '/kindleize' do
           BookDelivery.deliver_via_deferred_server(request)
           success_response('Your book is being generated and emailed to your kindle shortly.')
         else
-          BookDelivery.email_to_kindle(title, content, to_email)
+          book = BookFormatter.new(title, content)
+          BookDelivery.email_book_to_kindle(book, to_email)
           success_response('Your article will be emailed to your kindle shortly.')
         end
       else

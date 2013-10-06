@@ -1,15 +1,12 @@
 # encoding: utf-8
 class GitBookFormatter < BookFormatter
 
-  attr_accessor :git_folder
+  attr_accessor :git_folder, :title, :type
 
   def initialize(git_folder, url)
     self.git_folder = git_folder
     self.title = url.gsub(/.*\//,'').gsub('.git','')
-    kindle_gen_cmd = "kindlegen -verbose \"#{book_file_name}\" -o \"#{book_mobi_file_name}\""
-    self.content = converted_content
-    puts "running: #{kindle_gen_cmd}"
-    `#{kindle_gen_cmd}`
+    self.type  = 'html'
   end
 
   def formatted_title
@@ -21,21 +18,30 @@ class GitBookFormatter < BookFormatter
   end
 
   def book_file_name
-    "#{git_folder}/index.html"
+    converted_book_file_name
   end
 
-  def book_mobi_file_name
+  def converted_book_file_name
     "#{formatted_title}.mobi"
   end
-  
-  def book_mobi_file_path
-    "#{git_folder}/#{book_mobi_file_name}"
+
+  def delivery_file
+    kindle_gen_cmd = "kindlegen -verbose \"#{html_file_name}\" -o \"#{converted_book_file_name}\""
+    self.content = converted_content
+    puts "running: #{kindle_gen_cmd}"
+    `#{kindle_gen_cmd}`
+
+    converted_book_file_name
   end
 
   private
+  
+  def html_file_name
+    "#{git_folder}/index.html"
+  end
 
   def converted_content
-    html = File.read(self.book_file_name)
+    html = File.read(html_file_name)
     html.gsub("images","tmp_images")
   end
 

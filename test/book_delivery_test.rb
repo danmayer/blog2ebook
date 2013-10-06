@@ -16,7 +16,8 @@ class BookDeliveryTest < Test::Unit::TestCase
     File.expects(:open)
     File.stubs(:new).returns("")
     RestClient.expects(:post)
-    formatted_book = BookDelivery.email_to_kindle("title", "content", "fake@email")
+    book = BookFormatter.new("title", "content")
+    formatted_book = BookDelivery.email_book_to_kindle(book, "fake@email")
   end
 
 end
