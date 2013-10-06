@@ -29,6 +29,10 @@ class BookFormatter
     "#{book_file_name_without_ext}.mobi"
   end
 
+  def target_file_name
+    "#{formatted_title}.mobi"
+  end
+
   def formatted_book
     #TODO we do this type check twice move to inheritance based overrides for binary book type
     if type.match(/pdf|mobi|epub/)
@@ -46,7 +50,7 @@ class BookFormatter
     delivery_file = book_file_name
     
     if ENV['RACK_ENV']=='production' && (content.match(/img.*src/) || type.match(/epub/) )
-      kindle_gen_cmd = "kindlegen -verbose \"#{book_file_name}\" -o \"#{book_file_name_without_ext}.mobi\""
+      kindle_gen_cmd = "kindlegen -verbose \"#{book_file_name}\" -o \"#{target_file_name}\""
       puts "cmd: #{kindle_gen_cmd}"
       conversion_results = `#{kindle_gen_cmd}`
       puts conversion_results
