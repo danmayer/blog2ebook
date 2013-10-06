@@ -13,7 +13,7 @@ class BookDelivery
     book_file = book.book_file_name(root_path).gsub(/\.html/,".#{type}")
     `mkdir -p #{root_path}/tmp/#{title.gsub(/( |\.)/,'_')}`
 
-    File.open(book_file, 'w') {|f| f.write(file_content) }
+    File.open(book_file, 'w:binary') {|f| f.write(file_content) }
 
     email_file_to_kindle(title, book_file, to_email)      
   end
