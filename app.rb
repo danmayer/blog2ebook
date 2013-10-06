@@ -181,17 +181,18 @@ get_or_post '/kindleize' do
       puts error.backtrace.join("\n")
       error_response("There was a error building your book sorry about that please let me know what problems you had: #{error.message}")
     end
-  elsif params['url'].match(/\.pdf/)
+  elsif params['url'].match(/\.pdf/) || params['url'].match(/\.epub/)
+    type     = params['url'].match(/\.pdf/) ? 'pdf' : 'epub'
     doc      = document_fetcher.file_from_url
     content  = doc['content']
     title    = doc['title'] 
     to_email = user_email
 
-    BookDelivery.email_filecontent_to_kindle(title, content, to_email)
+    BookDelivery.email_filecontent_to_kindle(title, content, to_email, :type => type)
     if params['submit']
-      success_response('Your PDF document will be emailed to your kindle shortly.')
+      success_response("Your #{type} document will be emailed to your kindle shortly.")
     else
-      success_response("PDFs can't be previewed it will be emailed to your kindle shortly.")
+      success_response("#{type}'s can't be previewed it will be emailed to your kindle shortly.")
     end
   else
     begin

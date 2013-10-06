@@ -7,9 +7,10 @@ class BookDelivery
     defined?(settings) ? settings.root : File.expand_path(File.join(File.dirname(__FILE__), '../'))
   end
 
-  def self.email_filecontent_to_kindle(title, file_content, to_email)
+  def self.email_filecontent_to_kindle(title, file_content, to_email, opts = {})
+    type = opts.fetch(:type){ 'pdf' }
     book = BookFormatter.new(title, file_content)
-    book_file = book.book_file_name(root_path).gsub(/\.html/,'.pdf')
+    book_file = book.book_file_name(root_path).gsub(/\.html/,".#{type}")
     `mkdir -p #{root_path}/tmp/#{title.gsub(/( |\.)/,'_')}`
 
     File.open(book_file, 'w') {|f| f.write(file_content) }
