@@ -188,7 +188,7 @@ get_or_post '/kindleize' do
     title    = doc['title'] 
     to_email = user_email
 
-    if ENV['RACK_ENV']=='production' && type.match(/epub/)
+    if ENV['RACK_ENV']=='production' && type.match(/epub/) && !load_image_option_value
       puts "delivering #{title} via deferred server"
       BookDelivery.deliver_via_deferred_server(request)
       success_response('Your book is being generated and emailed to your kindle shortly.')
