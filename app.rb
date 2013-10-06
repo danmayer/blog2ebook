@@ -188,7 +188,13 @@ get_or_post '/kindleize' do
     title    = doc['title'] 
     to_email = user_email
 
-    BookDelivery.email_filecontent_to_kindle(title, content, to_email, :type => type)
+    if ENV['RACK_ENV']=='production' && type.match(/epub/)
+      puts "delivering #{title} via deferred server"
+      BookDelivery.deliver_via_deferred_server(request)
+      success_response('Your book is being generated and emailed to your kindle shortly.')
+    else
+      BookDelivery.email_filecontent_to_kindle(title, content, to_email, :type => type)
+    end
     if params['submit']
       success_response("Your #{type} document will be emailed to your kindle shortly.")
     else

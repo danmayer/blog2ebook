@@ -37,12 +37,12 @@ class BookDelivery
     File.open(book_file, 'w', encoding: 'ISO-8859-1') {|f| f.write(book.formatted_book) }
     delivery_file = book_file
 
-    if ENV['RACK_ENV']=='production' && content.match(/img.*src/)
+    if ENV['RACK_ENV']=='production' && (content.match(/img.*src/) || book_file.match(/epub/) )
       kindle_gen_cmd = "kindlegen -verbose \"#{book_file}\" -o \"#{book.formatted_title}.mobi\""
       puts "cmd: #{kindle_gen_cmd}"
       conversion_results = `#{kindle_gen_cmd}`
       puts conversion_results
-      delivery_file = book_file.gsub('.html','.mobi')
+      delivery_file = book_file.gsub(/\.(html|epub)/i,'.mobi')
     end
     
     UsageCount.increase
