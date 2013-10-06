@@ -10,7 +10,7 @@ class BookDelivery
   def self.email_filecontent_to_kindle(title, file_content, to_email, opts = {})
     type = opts.fetch(:type){ 'pdf' }
     book = BookFormatter.new(title, file_content)
-    book_file = book.book_file_name(root_path).gsub(/\.html/,".#{type}")
+    book_file = book.book_file_name(root_path).gsub(/\.(html|epub)/,".#{type}")
     `mkdir -p #{root_path}/tmp/#{title.gsub(/( |\.)/,'_')}`
 
     File.open(book_file, 'w:binary') {|f| f.write(file_content) }
