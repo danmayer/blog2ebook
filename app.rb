@@ -124,22 +124,30 @@ get_or_post '/kindleizecontent' do
 end
 
 get_or_post '/kindleize' do
-  if params['url'].nil?
-    error_response("You must provide the url param")
-  else
-    verify_url_and_email
-    verify_usage
-    document_fetcher = DocumentFetching.new(params['url'])
-    
-    if params['url'].match(/\.git/)
-      process_git_book(document_fetcher)
-    elsif params['url'].match(/\.rss/) || params['url'].match(/\.atom/) || params['url'].match(/\.xml/) || document_fetcher.rss_content?
-      process_feed_url(document_fetcher)
-    elsif params['url'].match(/\.pdf/) || params['url'].match(/\.epub/)
-      process_document_url(document_fetcher)
+  begin
+    if params['url'].nil?
+      error_response("You must provide the url param")
     else
-      process_webpage(document_fetcher)
+      verify_url_and_email
+      verify_usage
+      document_fetcher = DocumentFetching.new(params['url'])
+      
+      if params['url'].match(/\.git/)
+        process_git_book(document_fetcher)
+      elsif params['url'].match(/\.rss/) || params['url'].match(/\.atom/) || params['url'].match(/\.xml/) || document_fetcher.rss_content?
+        process_feed_url(document_fetcher)
+      elsif params['url'].match(/\.pdf/) || params['url'].match(/\.epub/)
+        process_document_url(document_fetcher)
+      else
+        process_webpage(document_fetcher)
+      end
     end
+  rescue RestClient::GatewayTimeout
+    error_response("Hmmm looks like I can't reach that article.")
+  rescue => error
+    puts "error during book building #{error.class} : #{error.message}"
+    puts error.backtrace.join("\n")
+    error_response("There was a error building your book! Sorry try again or let me know what problems you had: #{error.message}")
   end
 end
 
@@ -154,53 +162,41 @@ def non_deferred_request?
 end
 
 def process_git_book(document_fetcher)
-  begin
-    if pubish_request? && non_deferred_request?
-      BookDelivery.deliver_via_deferred_server(request)
-      success_response('Your book is being generated and emailed to your kindle shortly.')
+  if pubish_request? && non_deferred_request?
+    BookDelivery.deliver_via_deferred_server(request)
+    success_response('Your book is being generated and emailed to your kindle shortly.')
+  else
+    location = document_fetcher.document_from_git
+    book     = GitBookFormatter.new(location, params['url'])
+    to_email = user_email
+    
+    if pubish_request?
+      BookDelivery.email_book_to_kindle(book, to_email)
+      success_response('Your book is being emailed to your kindle shortly.')
     else
-      location = document_fetcher.document_from_git
-      book     = GitBookFormatter.new(location, params['url'])
-      to_email = user_email
-        
-      if pubish_request?
-        BookDelivery.email_book_to_kindle(book, to_email)
-        success_response('Your book is being emailed to your kindle shortly.')
-      else
-        render_book_preview(book)
-      end
+      render_book_preview(book)
     end
-  rescue RestClient::ResourceNotFound
-    error_response("Server request timed out, please try again.")
   end
 end
 
 def process_feed_url(document_fetcher)
-  begin
-    options = {'load_images' => load_image_option_value}
-    doc      = document_fetcher.document_from_feed(options)
-    content  = doc[:content]
-    title    = doc[:title] 
-    to_email = user_email
-    
-    puts "current env #{ENV['RACK_ENV']} content match #{content.match(/img.*src/)} image option #{load_image_option_value}"
-    if pubish_request?
-      if ENV['RACK_ENV']=='production' && content.match(/img.*src/) && !load_image_option_value
-        BookDelivery.deliver_via_deferred_server(request)
-        success_response('Your book is being generated and emailed to your kindle shortly.')
-      else
-        puts "emailing #{title} to #{to_email} content #{content.length}"
-        book = BookFormatter.new(title, content)
-        BookDelivery.email_book_to_kindle(book, to_email)
-        success_response('Your book is being emailed to your kindle shortly.')
-      end
+  options = {'load_images' => load_image_option_value}
+  doc      = document_fetcher.document_from_feed(options)
+  content  = doc[:content]
+  title    = doc[:title] 
+  to_email = user_email
+  
+  if pubish_request?
+    if non_deferred_request? && content.match(/img.*src/)
+      BookDelivery.deliver_via_deferred_server(request)
+      success_response('Your book is being generated and emailed to your kindle shortly.')
     else
-      render_preview(title,content)
+      book = BookFormatter.new(title, content)
+      BookDelivery.email_book_to_kindle(book, to_email)
+      success_response('Your book #{title} is being emailed to #{to_email} your kindle shortly.')
     end
-  rescue => error
-    puts "error during book building #{error.class}"
-    puts error.backtrace.join("\n")
-    error_response("There was a error building your book sorry about that please let me know what problems you had: #{error.message}")
+  else
+    render_preview(title,content)
   end
 end
 
@@ -211,43 +207,38 @@ def process_document_url(document_fetcher)
   title    = doc['title'] 
   to_email = user_email
   
-  if ENV['RACK_ENV']=='production' && type.match(/epub/) && !load_image_option_value
+  if non_deferred_request? && type.match(/epub/)
     BookDelivery.deliver_via_deferred_server(request)
-    success_response('Your book is being generated and emailed to your kindle shortly.')
+    message = "Your #{type} book is being generated and emailed to your kindle shortly."
   else
     book = BookFormatter.new(title, content, type)
     BookDelivery.email_book_to_kindle(book, to_email)
+    message = "Your #{type} document will be emailed to your kindle shortly."
   end
   if pubish_request?
-    success_response("Your #{type} document will be emailed to your kindle shortly.")
+    success_response(message)
   else
     success_response("#{type}'s can't be previewed it will be emailed to your kindle shortly.")
   end
 end
 
 def process_webpage(document_fetcher)
-  begin
-    doc      = document_fetcher.document_from_url
-    content  = doc['content']
-    title    = doc['title'] 
-    to_email = user_email
-    
-    if pubish_request?
-        if ENV['RACK_ENV']=='production' && content.match(/img.*src/) && !load_image_option_value
-          BookDelivery.deliver_via_deferred_server(request)
-          success_response('Your book is being generated and emailed to your kindle shortly.')
-        else
-          book = BookFormatter.new(title, content)
-          BookDelivery.email_book_to_kindle(book, to_email)
-          success_response('Your article will be emailed to your kindle shortly.')
-        end
+  doc      = document_fetcher.document_from_url
+  content  = doc['content']
+  title    = doc['title'] 
+  to_email = user_email
+  
+  if pubish_request?
+    if non_deferred_request? && content.match(/img.*src/)
+      BookDelivery.deliver_via_deferred_server(request)
+      success_response('Your book is being generated and emailed to your kindle shortly.')
     else
-      render_preview(title,content)
+      book = BookFormatter.new(title, content)
+      BookDelivery.email_book_to_kindle(book, to_email)
+      success_response('Your article will be emailed to your kindle shortly.')
     end
-  rescue RestClient::ResourceNotFound
-    error_response("Server request timed out, please try again.")
-  rescue RestClient::GatewayTimeout
-    error_response("Hmmm looks like I can't reach that article.")
+  else
+    render_preview(title,content)
   end
 end
 
