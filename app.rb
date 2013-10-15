@@ -1,35 +1,9 @@
 # encoding: UTF-8
-require 'json'
-require 'fileutils'
-require 'rest-client'
-require 'open-uri'
-require 'openssl'
-module OpenSSL
-  module SSL
-    remove_const :VERIFY_PEER
-  end
-end
-OpenSSL::SSL::VERIFY_PEER = OpenSSL::SSL::VERIFY_NONE
+require 'rubygems'
+require 'bundler/setup'
+$LOAD_PATH << File.dirname(__FILE__) + '/lib'
 
-require 'nokogiri'
-require 'sinatra/flash'
-require 'email_veracity'
-require 'redis'
-require 'addressable/uri'
-require 'airbrake'
-
-require './lib/rack_catcher'
-require './lib/book_formatter'
-require './lib/git_book_formatter'
-require './lib/document_fetching'
-require './lib/book_delivery'
-require './lib/redis_initializer'
-
-Encoding.default_external = Encoding::UTF_8
-Encoding.default_internal = Encoding::UTF_8
-
-MAIL_API_KEY = ENV['MAILGUN_API_KEY']
-MAIL_API_URL = "https://api:#{MAIL_API_KEY}@api.mailgun.net/v2/app7941314.mailgun.org"
+require 'sinatra_env'
 
 set :public_folder, File.dirname(__FILE__) + '/public'
 set :root, File.dirname(__FILE__)
