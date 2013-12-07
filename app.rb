@@ -2,7 +2,6 @@
 require 'rubygems'
 require 'bundler/setup'
 $LOAD_PATH << File.dirname(__FILE__) + '/lib'
-
 require 'sinatra_env'
 
 set :public_folder, File.dirname(__FILE__) + '/public'
@@ -65,14 +64,14 @@ before /.*/ do
   end
 end
 
-#this allows preview of git books to work
-get "/tmp_images/:file" do |file|
-  send_file File.join("./tmp/git_book/images/", file)
-end
-
 def self.get_or_post(url,&block)
   get(url,&block)
   post(url,&block)
+end
+
+#this allows preview of git books to work
+get "/tmp_images/:file" do |file|
+  send_file File.join("./tmp/git_book/images/", file)
 end
 
 get_or_post '/' do
