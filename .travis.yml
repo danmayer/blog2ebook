@@ -1,7 +1,6 @@
 language: ruby
 rvm:
 - 1.9.3
-- rbx-2
 deploy:
   provider: heroku
   app: blog2ebook
