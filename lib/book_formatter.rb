@@ -10,7 +10,7 @@ class BookFormatter
   end
 
   def formatted_title
-    title.gsub('.',' ').gsub(/( |\.|')/,'_').gsub(/'/,'')[0...50]
+    (title.gsub('.',' ').gsub(/( |\.|')/,'_').gsub(/'/,'')[0...50]).strip
   end
 
   def book_folder_name
