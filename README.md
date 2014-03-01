@@ -82,6 +82,7 @@ This project runs [travis-ci.org](http://travis-ci.org)
   * Support multiple book formats possibly using Calibre for converting
   * Support file upload to package up and publish book to amazon, or at least allow authors to preview on kindle. This would be work to support / Steve / Erin guides.
   * add support for http://foliotek.github.io/DocEditable/ to edit a book on site.
+  * Add mobile file send straight to kindle feature
   
 ## Contributing
 
