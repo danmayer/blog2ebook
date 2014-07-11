@@ -127,11 +127,11 @@ end
 private
 
 def deferred_request?
-  !!(ENV['RACK_ENV']=='production' && params['load_images'])
+  false #!!(ENV['RACK_ENV']=='production' && params['load_images'])
 end
 
 def non_deferred_request?
-  !deferred_request?
+  true #!deferred_request?
 end
 
 def process_git_book(document_fetcher)

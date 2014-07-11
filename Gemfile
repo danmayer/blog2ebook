@@ -9,6 +9,7 @@ gem 'email_veracity'
 gem 'redis'
 gem 'addressable'
 gem 'airbrake'
+gem 'kindlegen'
 
 # disabled for now but used to test other single article rendering methods
 # gem 'pismo'

@@ -23,6 +23,7 @@ require 'git_book_formatter'
 require 'document_fetching'
 require 'book_delivery'
 require 'redis_initializer'
+require 'kindlegen'
 
 Encoding.default_external = Encoding::UTF_8
 Encoding.default_internal = Encoding::UTF_8

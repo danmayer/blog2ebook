@@ -52,8 +52,9 @@ class BookFormatter
     if ENV['RACK_ENV']=='production' && (content.match(/img.*src/) || type.match(/epub/) )
       kindle_gen_cmd = "kindlegen -verbose \"#{book_file_name}\" -o \"#{target_file_name}\""
       puts "cmd: #{kindle_gen_cmd}"
-      conversion_results = `#{kindle_gen_cmd}`
-      puts conversion_results
+      #conversion_results = `#{kindle_gen_cmd}`
+      #puts conversion_results
+      Kindlegen.run("-verbose", book_file_name, "-o", target_file_name)
       delivery_file = converted_book_file_name
     end
     delivery_file
