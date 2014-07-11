@@ -6,7 +6,7 @@ class GitBookFormatter < BookFormatter
   attr_accessor :git_folder, :title, :type
 
   def initialize(git_folder, url)
-    self.git_folder = git_folder.gsub("./tmp",BookFormatter.root_path+"tmp/")
+    self.git_folder = git_folder.gsub("./tmp",BookFormatter.root_path+"/tmp")
     self.title = url.gsub(/.*\//,'').gsub('.git','')
     self.type  = 'html'
   end
