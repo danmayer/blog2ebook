@@ -1,4 +1,6 @@
 # encoding: utf-8
+require 'kindlegen'
+
 class GitBookFormatter < BookFormatter
 
   attr_accessor :git_folder, :title, :type
@@ -30,7 +32,6 @@ class GitBookFormatter < BookFormatter
     self.content = converted_content
     puts "running with gem: #{kindle_gen_cmd}"
     Kindlegen.run("-verbose", html_file_name, "-o", converted_book_file_name)
-    #`#{kindle_gen_cmd}`
 
     converted_book_file_name
   end
