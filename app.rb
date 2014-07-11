@@ -10,7 +10,7 @@ enable :logging
 
 use Rack::Session::Cookie, :key => 'kindleizer.rack.session',
 :path => '/',
-:expire_after => 2592000, # In seconds
+:expire_after => 6592000, # In seconds
 :secret => "update_secret_#{ENV['MAILGUN_API_KEY']}"
 
 configure :development do
@@ -50,10 +50,6 @@ helpers do
     else
       ''
     end
-  end
-
-  def load_image_option_value
-    ((ENV['RACK_ENV']=='production' && params['load_images']=='true') || ENV['RACK_ENV']!='production') && !params['preview']
   end
 
 end
@@ -126,14 +122,6 @@ end
 
 private
 
-def deferred_request?
-  !!(ENV['RACK_ENV']=='production' && params['load_images'])
-end
-
-def non_deferred_request?
-  !deferred_request?
-end
-
 def process_git_book(document_fetcher)
   location = document_fetcher.document_from_git
   book     = GitBookFormatter.new(location, params['url'])
@@ -148,21 +136,16 @@ def process_git_book(document_fetcher)
 end
 
 def process_feed_url(document_fetcher)
-  options = {'load_images' => load_image_option_value}
+  options = {'load_images' => true}
   doc      = document_fetcher.document_from_feed(options)
   content  = doc[:content]
   title    = doc[:title] 
   to_email = user_email
   
   if pubish_request?
-    if false && non_deferred_request? && content.match(/img.*src/)
-      BookDelivery.deliver_via_deferred_server(request)
-      success_response('Your book is being generated and emailed to your kindle shortly.')
-    else
-      book = BookFormatter.new(title, content)
-      BookDelivery.email_book_to_kindle(book, to_email)
-      success_response('Your book #{title} is being emailed to #{to_email} your kindle shortly.')
-    end
+    book = BookFormatter.new(title, content)
+    BookDelivery.email_book_to_kindle(book, to_email)
+    success_response('Your book #{title} is being emailed to #{to_email} your kindle shortly.')
   else
     render_preview(title,content)
   end
@@ -175,14 +158,9 @@ def process_document_url(document_fetcher)
   title    = doc['title'] 
   to_email = user_email
   
-  if false && non_deferred_request? && type.match(/epub/)
-    BookDelivery.deliver_via_deferred_server(request)
-    message = "Your #{type} book is being generated and emailed to your kindle shortly."
-  else
-    book = BookFormatter.new(title, content, type)
-    BookDelivery.email_book_to_kindle(book, to_email)
-    message = "Your #{type} document will be emailed to your kindle shortly."
-  end
+  book = BookFormatter.new(title, content, type)
+  BookDelivery.email_book_to_kindle(book, to_email)
+  message = "Your #{type} document will be emailed to your kindle shortly."
   if pubish_request?
     success_response(message)
   else
@@ -197,14 +175,9 @@ def process_webpage(document_fetcher)
   to_email = user_email
   
   if pubish_request?
-    if false && non_deferred_request? && content.match(/img.*src/)
-      BookDelivery.deliver_via_deferred_server(request)
-      success_response('Your book is being generated and emailed to your kindle shortly.')
-    else
-      book = BookFormatter.new(title, content)
-      BookDelivery.email_book_to_kindle(book, to_email)
-      success_response('Your article will be emailed to your kindle shortly.')
-    end
+    book = BookFormatter.new(title, content)
+    BookDelivery.email_book_to_kindle(book, to_email)
+    success_response('Your article will be emailed to your kindle shortly.')
   else
     render_preview(title,content)
   end
