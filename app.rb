@@ -127,15 +127,15 @@ end
 private
 
 def deferred_request?
-  false #!!(ENV['RACK_ENV']=='production' && params['load_images'])
+  !!(ENV['RACK_ENV']=='production' && params['load_images'])
 end
 
 def non_deferred_request?
-  true #!deferred_request?
+  !deferred_request?
 end
 
 def process_git_book(document_fetcher)
-  if pubish_request? && non_deferred_request?
+  if false && pubish_request? && non_deferred_request?
     BookDelivery.deliver_via_deferred_server(request)
     success_response('Your book is being generated and emailed to your kindle shortly.')
   else
@@ -160,7 +160,7 @@ def process_feed_url(document_fetcher)
   to_email = user_email
   
   if pubish_request?
-    if non_deferred_request? && content.match(/img.*src/)
+    if false && non_deferred_request? && content.match(/img.*src/)
       BookDelivery.deliver_via_deferred_server(request)
       success_response('Your book is being generated and emailed to your kindle shortly.')
     else
@@ -180,7 +180,7 @@ def process_document_url(document_fetcher)
   title    = doc['title'] 
   to_email = user_email
   
-  if non_deferred_request? && type.match(/epub/)
+  if false && non_deferred_request? && type.match(/epub/)
     BookDelivery.deliver_via_deferred_server(request)
     message = "Your #{type} book is being generated and emailed to your kindle shortly."
   else
@@ -202,7 +202,7 @@ def process_webpage(document_fetcher)
   to_email = user_email
   
   if pubish_request?
-    if non_deferred_request? && content.match(/img.*src/)
+    if false && non_deferred_request? && content.match(/img.*src/)
       BookDelivery.deliver_via_deferred_server(request)
       success_response('Your book is being generated and emailed to your kindle shortly.')
     else
