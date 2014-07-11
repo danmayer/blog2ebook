@@ -36,7 +36,8 @@ class DocumentFetching
 
   def document_from_git
     `rm -rf ./tmp/git_book/`
-    `git clone #{@url} ./tmp/git_book`
+    puts "getting #{@url}"
+    puts `git clone #{@url} ./tmp/git_book`
     "./tmp/git_book"
   end
 
