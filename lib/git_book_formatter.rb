@@ -28,8 +28,9 @@ class GitBookFormatter < BookFormatter
   def delivery_file
     kindle_gen_cmd = "kindlegen -verbose \"#{html_file_name}\" -o \"#{converted_book_file_name}\""
     self.content = converted_content
-    puts "running: #{kindle_gen_cmd}"
-    `#{kindle_gen_cmd}`
+    puts "running with gem: #{kindle_gen_cmd}"
+    Kindlegen.run("-verbose", html_file_name, "-o", converted_book_file_name)
+    #`#{kindle_gen_cmd}`
 
     converted_book_file_name
   end
