@@ -27,12 +27,16 @@ class GitBookFormatter < BookFormatter
     "#{formatted_title}.mobi"
   end
 
+  def converted_book_file_name_with_path
+    "./tmp/git_book/#{formatted_title}.mobi"
+  end
+
   def delivery_file
     kindle_gen_cmd = "kindlegen -verbose \"#{html_file_name}\" -o \"#{formatted_title}\""
     self.content = converted_content
     puts "running with gem: #{kindle_gen_cmd}"
     Kindlegen.run("-verbose", html_file_name, "-o", converted_book_file_name)
-    converted_book_file_name
+    converted_book_file_name_with_path
   end
 
   private
