@@ -135,20 +135,15 @@ def non_deferred_request?
 end
 
 def process_git_book(document_fetcher)
-  if false && pubish_request? && non_deferred_request?
-    BookDelivery.deliver_via_deferred_server(request)
-    success_response('Your book is being generated and emailed to your kindle shortly.')
-  else
-    location = document_fetcher.document_from_git
-    book     = GitBookFormatter.new(location, params['url'])
-    to_email = user_email
+  location = document_fetcher.document_from_git
+  book     = GitBookFormatter.new(location, params['url'])
+  to_email = user_email
     
-    if pubish_request?
-      BookDelivery.email_book_to_kindle(book, to_email)
-      success_response('Your book is being emailed to your kindle shortly.')
-    else
-      render_book_preview(book)
-    end
+  if pubish_request?
+    BookDelivery.email_book_to_kindle(book, to_email)
+    success_response('Your book is being emailed to your kindle shortly.')
+  else
+    render_book_preview(book)
   end
 end
 
