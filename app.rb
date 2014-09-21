@@ -75,11 +75,17 @@ get_or_post '/' do
   erb :index
 end
 
+def fix_title(title)
+  title    = content.split("\n").first
+  title    = title.gsub(/\(.*/,'').gsub(/http.*/,'')
+  title.match(/[\w\s-]*/)[0]
+end
+  
 get_or_post '/kindleizecontent' do
   verify_content_and_email
   verify_usage
   content  = params['content']
-  title    = content.split("\n").first
+  title    = fix_title(title)
   to_email = user_email
 
   if pubish_request?
@@ -87,7 +93,6 @@ get_or_post '/kindleizecontent' do
     BookDelivery.email_book_to_kindle(book, to_email)
     success_response('Your content is being emailed to your kindle shortly.')
   else
-    title    = title.gsub(/\(.*/,'').gsub(/http.*/,'')
     @content = content
     render_preview(title,content)
   end
