@@ -87,6 +87,7 @@ get_or_post '/kindleizecontent' do
     BookDelivery.email_book_to_kindle(book, to_email)
     success_response('Your content is being emailed to your kindle shortly.')
   else
+    title    = title.gsub(/\(.*/,'').gsub(/http.*/,'')
     @content = content
     render_preview(title,content)
   end
@@ -105,7 +106,7 @@ get_or_post '/kindleize' do
         process_git_book(document_fetcher)
       elsif params['url'].match(/\.rss/) || params['url'].match(/\.atom/) || params['url'].match(/\.xml/) || document_fetcher.rss_content?
         process_feed_url(document_fetcher)
-      elsif params['url'].match(/\.pdf/) || params['url'].match(/\.epub/)
+      elsif params['url'].match(/\.pdf/) || params['url'].match(/\.epub/) || params['url'].match(/\.mobi/)
         process_document_url(document_fetcher)
       else
         process_webpage(document_fetcher)
