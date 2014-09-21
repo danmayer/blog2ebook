@@ -75,7 +75,7 @@ get_or_post '/' do
   erb :index
 end
 
-def fix_title(title)
+def create_title(content)
   title    = content.split("\n").first
   title    = title.gsub(/\(.*/,'').gsub(/http.*/,'')
   title.match(/[\w\s-]*/)[0]
@@ -85,7 +85,7 @@ get_or_post '/kindleizecontent' do
   verify_content_and_email
   verify_usage
   content  = params['content']
-  title    = fix_title(title)
+  title    = create_title(content)
   to_email = user_email
 
   if pubish_request?
