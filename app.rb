@@ -285,7 +285,12 @@ def verify_content_and_email
 end
 
 def verify_email
-  address = EmailVeracity::Address.new(user_email)
+  begin
+    address = EmailVeracity::Address.new(user_email)
+  rescue ArgumentError
+    flash[:error] = "email must be valid"
+    halt redirect '/'
+  end
   request.accept.each do |type|
     case type
     when 'text/json'
